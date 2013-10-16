@@ -1,0 +1,2 @@
+all: 
+	g++ histograms_mc.cc SimpleRNG.cpp main_mc.cc montecarlo.cc telescope_mc.cc material_mc.cc particle_mc.cc -Wall -Wextra -O3 -o RunMonteCarlo -I /nfs/dust/atlas/user/hamnett/ilcsoft/v01-17-02/root/5.34.05/include -I /opt/ilcsoft/v01-17-02/root/5.34.05/include/ `root-config --cflags --glibs`
