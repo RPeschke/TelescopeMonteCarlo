@@ -15,8 +15,12 @@ class Particle{
     double BeamCentreX_;
     double BeamCentreY_;
   public:
+	  double x,y,z;
+	  double phi,theta;
+	  double energy_; // momentum
+	  void newParticle(); //this function starts the random generator.
     Particle();
-    ~Particle();
+    
     void init(std::string name, double mass, double charge, 
               double energy, double beamsize, double beamspread,
               double beamcentrex, double beamcentrey);

@@ -1,0 +1,31 @@
+﻿Der Buildvorgang wurde am 10/31/2013 8:40:52 PM gestartet.
+     1>Projekt "C:\Users\Argg\Documents\Visual Studio 2012\Projects\EUTelescopeMC\TelescopeMonteCarlo\Win\TelescopeMC\TelescopeMC.vcxproj" auf Knoten "2", Build Ziel(e).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"C:\ROOT-5.34\include" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"ROOT 5.34\\" /Fd"ROOT 5.34\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\main\src\Beam_mc.cc ..\..\main\src\main_mc.cc ..\..\main\src\material_mc.cc ..\..\main\src\particle_mc.cc ..\..\main\src\Planes_mc.cc ..\..\main\src\telescope_mc.cc
+         Beam_mc.cc
+     1>..\..\main\src\Beam_mc.cc(1): fatal error C1083: Datei (Include) kann nicht geöffnet werden: "Beam_mc.h": No such file or directory
+         main_mc.cc
+     1>c:\root-5.34\include\TString.h(503): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\stdio.h(357): Siehe Deklaration von 'sprintf'
+     1>c:\root-5.34\include\TString.h(506): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\stdio.h(357): Siehe Deklaration von 'sprintf'
+     1>c:\root-5.34\include\TString.h(524): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\stdio.h(357): Siehe Deklaration von 'sprintf'
+     1>c:\root-5.34\include\TString.h(535): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\stdio.h(357): Siehe Deklaration von 'sprintf'
+     1>c:\root-5.34\include\TString.h(543): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\stdio.h(357): Siehe Deklaration von 'sprintf'
+     1>..\..\main\src\main_mc.cc(5): fatal error C1083: Datei (Include) kann nicht geöffnet werden: "Planes_mc.h": No such file or directory
+         material_mc.cc
+     1>..\..\main\src\material_mc.cc(3): fatal error C1083: Datei (Include) kann nicht geöffnet werden: "material_mc.h": No such file or directory
+         particle_mc.cc
+     1>..\..\main\src\particle_mc.cc(3): fatal error C1083: Datei (Include) kann nicht geöffnet werden: "particle_mc.h": No such file or directory
+         Planes_mc.cc
+     1>..\..\main\src\Planes_mc.cc(1): fatal error C1083: Datei (Include) kann nicht geöffnet werden: "Planes_mc.h": No such file or directory
+         telescope_mc.cc
+     1>..\..\main\src\telescope_mc.cc(3): fatal error C1083: Datei (Include) kann nicht geöffnet werden: "telescope_mc.h": No such file or directory
+     1>Die Erstellung des Projekts "C:\Users\Argg\Documents\Visual Studio 2012\Projects\EUTelescopeMC\TelescopeMonteCarlo\Win\TelescopeMC\TelescopeMC.vcxproj" ist abgeschlossen, Build Ziel(e) -- FEHLER.
+
+Fehler beim Buildvorgang.
+
+Verstrichene Zeit 00:00:02.33

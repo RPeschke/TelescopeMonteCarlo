@@ -2,3 +2,5 @@ Win/TelescopeMC/Debug/*
 *.sdf
 *.suo
 *.opensdf
+Win/TelescopeMC/Release/*
+*.root

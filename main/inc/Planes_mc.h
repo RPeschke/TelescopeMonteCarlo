@@ -9,13 +9,13 @@
 	but for now the information needs to be hard coded
 
 */
-
+class Particle;
 namespace mcEUTEL{
-	struct particle
-	{
-		double x,y,z,phi,theta,energy;
-	};
-	void Disp(const particle& p);
+// 	struct particle
+// 	{
+// 		double x,y,z,phi,theta,energy;
+// 	};
+	void Disp(const Particle& p);
 	struct Positions
 	{
 		double x,y,z;
@@ -51,25 +51,31 @@ namespace mcEUTEL{
 			* input by ref and changes the value of the input. 
 			* @return void 
 			*/
-			void propagate(particle& p);
+			void propagate(Particle& p);
 			/**
 			* checks where on the Sensor the hit was. records original position an Sensor response.  
 			* @param p gives the information about the particle.  
 			* @return void 
 			*/
-			void getHit(const particle& p){};
-			double getZEndPos(){return p4_.z;};
+			void getHit(const Particle& p);;
+			
+			double getZEndPos() const{return p4_.z;};
+			bool write2file;
+			int hit_x,hit_y;
 	private:
 
 
 
 		Positions p1_,p2_,p3_,p4_;
+		
 		double radiationLength_,thickness;
 		double pixelSizeX_,pixelSizeY_; /*!< the size of the Pixel in mm*/
-
+		
 	};
 
 	Planes makeTelescopePlane(double zPosition);
+	Planes makeTelescopePlane(const Planes& PreviousPlane);
 	Planes makeAirPlane(double zStart,double ZEnd);
+	Planes makeAirPlane(const Planes& PreviousPlane,double ZEnd);	
 }
 #endif // Planes_h__

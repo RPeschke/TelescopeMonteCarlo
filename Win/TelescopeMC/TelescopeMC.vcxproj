@@ -138,7 +138,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(rootsys)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(rootsys)\include;..\..\main\inc\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -237,6 +237,7 @@
     <ClCompile Include="..\..\main\src\material_mc.cc" />
     <ClCompile Include="..\..\main\src\particle_mc.cc" />
     <ClCompile Include="..\..\main\src\Planes_mc.cc" />
+    <ClCompile Include="..\..\main\src\randomGen.cc" />
     <ClCompile Include="..\..\main\src\telescope_mc.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +245,7 @@
     <ClInclude Include="..\..\main\inc\montecarlo.h" />
     <ClInclude Include="..\..\main\inc\particle_mc.h" />
     <ClInclude Include="..\..\main\inc\Planes_mc.h" />
+    <ClInclude Include="..\..\main\inc\randomGen.h" />
     <ClInclude Include="..\..\main\inc\telescope_mc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

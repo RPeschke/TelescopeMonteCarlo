@@ -4,6 +4,8 @@
 #include <TFile.h>
 #include "Planes_mc.h"
 #include <vector>
+#include "particle_mc.h"
+#include "..\inc\randomGen.h"
 
 using namespace std;
 using namespace mcEUTEL;
@@ -63,30 +65,74 @@ int main(int argc, char *argv[]){
 
 // 	/Planes p(p1,p2,p3,p4);
 // 	/p.setRadiationLength(9.5);
+	int plane_id=0;
+	double true_x,true_y;
+	int hit_x,hit_y;
+	double randomNr;
+	TFile f("test.root","recreate");
+	TTree *tree=new TTree("tree","a simple tree");
+
+	tree->Branch("plane_id",&plane_id,"plane_id/I");
+	tree->Branch("true_x",&true_x,"true_x/D");
+	tree->Branch("true_y",&true_y,"true_y/D");
+	tree->Branch("hit_x",&hit_x,"hit_x/I");
+	tree->Branch("hit_y",&hit_y,"hit_y/I");
+	tree->Branch("rand",&randomNr,"rand/D");
 	std::vector<Planes> pl;
 	pl.push_back(makeTelescopePlane(0));
 	pl.push_back(makeAirPlane(pl.back().getZEndPos(),150));
 	pl.push_back(makeTelescopePlane(pl.back().getZEndPos()));
-	pl.push_back(makeAirPlane(pl.back().getZEndPos(),150));
+	pl.push_back(makeAirPlane(pl.back().getZEndPos(),300));
 	pl.push_back(makeTelescopePlane(pl.back().getZEndPos()));
 
 	// enter DUT here
-	pl.push_back(makeAirPlane(pl.back().getZEndPos(),150));
-	pl.push_back(makeTelescopePlane(pl.back().getZEndPos()));
-	pl.push_back(makeAirPlane(pl.back().getZEndPos(),150));
-	pl.push_back(makeTelescopePlane(pl.back().getZEndPos()));
-	pl.push_back(makeAirPlane(pl.back().getZEndPos(),150));
-	pl.push_back(makeTelescopePlane(pl.back().getZEndPos()));
+	pl.push_back(makeAirPlane(pl.back(),450));
+	pl.push_back(makeTelescopePlane(pl.back()));
+	pl.push_back(makeAirPlane(pl.back(),600));
+	pl.push_back(makeTelescopePlane(pl.back()));
+	pl.push_back(makeAirPlane(pl.back(),750));
+	pl.push_back(makeTelescopePlane(pl.back()));
 
-	particle t={0,0,0,0,0,5};
-	Disp(t);
-	for (auto p:pl)
+Particle t;
+t.init("electron",0.511, //mass
+	   -1,               //charge
+	   5,                //energy
+	   5,                //beam Size
+	   00,              // beam spread
+	   10,               // beam center X 
+	   5);               // beam center Y
+
+for (int i=1;i<1000000;++i)
+{
+	plane_id=0;
+t.newParticle();	
+//	Disp(t);
+	if (i%1000==0)
 	{
-		p.propagate(t);
-		cout<<"telescope: "<<endl;
-		Disp(t);
-	}
+		cout<<i<<endl;
 
+	}
+		for (auto p:pl)
+	{
+		p.getHit(t);
+
+		//cout<<"telescope: "<<endl;
+		//Disp(t);
+		if (p.write2file)
+		{
+		//	Disp(t);
+			true_x=t.x;
+			true_y=t.y;
+			hit_x=p.hit_x;
+			hit_y=p.hit_y;
+			randomNr=getNormRandom();
+			tree->Fill();
+			++plane_id;
+		}
+				p.propagate(t);
+	}
 	
+}	
+f.Write();
 	return 0;
 }
