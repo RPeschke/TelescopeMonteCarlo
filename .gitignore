@@ -4,3 +4,7 @@ Win/TelescopeMC/Debug/*
 *.opensdf
 Win/TelescopeMC/Release/*
 *.root
+*.tlog
+*.lastbuildstate
+*.log
+*.unsuccessfulbuild
