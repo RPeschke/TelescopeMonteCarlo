@@ -1,17 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Quelldateien">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Headerdateien">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Ressourcendateien">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="RapidXML">
+      <UniqueIdentifier>{a89fcd71-1048-4358-9179-75403ee45f07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{ab5aeb32-d728-4339-a99e-263c166e4002}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main\Headerdateien">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="main\Quelldateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ConfigurationsXML">
+      <UniqueIdentifier>{b920e5d9-ca20-49f0-9efe-5d967b7c4c91}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -19,42 +28,56 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\main\src\main_mc.cc">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\main\src\material_mc.cc">
-      <Filter>Quelldateien</Filter>
+      <Filter>main\Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="..\..\main\src\particle_mc.cc">
-      <Filter>Quelldateien</Filter>
+      <Filter>main\Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="..\..\main\src\telescope_mc.cc">
-      <Filter>Quelldateien</Filter>
+      <Filter>main\Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="..\..\main\src\Planes_mc.cc">
-      <Filter>Quelldateien</Filter>
+      <Filter>main\Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="..\..\main\src\randomGen.cc">
-      <Filter>Quelldateien</Filter>
+      <Filter>main\Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main\src\TelescopeSetup_mc.cc">
+      <Filter>main\Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\main\inc\material_mc.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\main\inc\montecarlo.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\main\inc\particle_mc.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>main\Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\..\main\inc\telescope_mc.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>main\Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\..\main\inc\Planes_mc.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>main\Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\..\main\inc\randomGen.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>main\Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml.hpp">
+      <Filter>RapidXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml_iterators.hpp">
+      <Filter>RapidXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml_print.hpp">
+      <Filter>RapidXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml_utils.hpp">
+      <Filter>RapidXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\inc\TelescopeSetup_mc.h">
+      <Filter>main\Headerdateien</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\conf\telescopSetup.xml">
+      <Filter>ConfigurationsXML</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

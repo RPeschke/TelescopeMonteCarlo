@@ -39,3 +39,21 @@ void Particle::newParticle()
 	theta=0;
 	z=0;
 }
+
+int Particle::ProcessXMLNode( rapidxml::xml_node<> *node )
+{
+	if(strcmp(node->name(),"Beam")) return -1; // to make sure that the correct node is used
+	
+	auto test=node->first_node("Type");
+	auto n=test->first_node()->value();
+	Name_=node->first_node("Type")->first_node()->value();
+	Mass_=std::atof(node->first_node("mass")->first_node()->value());
+
+	Charge_ = std::atof(node->first_node("charge")->first_node()->value());
+
+	Energy_ =std::atof(node->first_node("energy")->first_node()->value());
+	BeamSize_ = std::atof(node->first_node("beamSize")->first_node()->value());
+	BeamSpread_ =std::atof(node->first_node("beamEnergySpread")->first_node()->value());
+	BeamCentreX_ = std::atof(node->first_node("beamCenterX")->first_node()->value());
+	BeamCentreY_ = std::atof(node->first_node("beamCenterY")->first_node()->value());
+}

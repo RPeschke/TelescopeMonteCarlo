@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ConfigurationFile>
+
+<Planes>
+  <plane nr="1" Type="TelescopePlane">
+    <pixel>
+     <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="0"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="0"/>
+      </position>
+    </pixel>
+    <ActiveArea>
+      <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="0"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="0"/>
+      </position>
+      <position nr="3">
+        <x pos="20"/>
+        <y pos="20"/>
+        <z pos="0"/>
+      </position>
+      <position nr="4">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="0.05"/>
+      </position>
+    </ActiveArea>
+  <radiationLength value="93.6"/>
+  <PixelSize x="0.045" y="0.045"/>
+  </plane>
+  <plane nr="2" Type="TelescopePlane">
+    <pixel>
+     <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="150"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="150"/>
+      </position>
+    </pixel>
+    <ActiveArea>
+      <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="150"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="150"/>
+      </position>
+      <position nr="3">
+        <x pos="20"/>
+        <y pos="20"/>
+        <z pos="150"/>
+      </position>
+      <position nr="4">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="150.05"/>
+      </position>
+    </ActiveArea>
+  <radiationLength value="93.6"/>
+  <PixelSize x="0.045" y="0.045"/>
+  </plane>
+  <plane nr="3" Type="TelescopePlane">
+        <pixel>
+     <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="300"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="300"/>
+      </position>
+    </pixel>
+    <ActiveArea>
+      <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="300"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="300"/>
+      </position>
+      <position nr="3">
+        <x pos="20"/>
+        <y pos="20"/>
+        <z pos="300"/>
+      </position>
+      <position nr="4">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="300.05"/>
+      </position>
+    </ActiveArea>
+  <radiationLength value="93.6"/>
+  <PixelSize x="0.045" y="0.045"/>
+  </plane>
+  <plane nr="4" Type="TelescopePlane">
+        <pixel>
+     <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="450"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="450"/>
+      </position>
+    </pixel>
+    <ActiveArea>
+      <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="450"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="450"/>
+      </position>
+      <position nr="3">
+        <x pos="20"/>
+        <y pos="20"/>
+        <z pos="450"/>
+      </position>
+      <position nr="4">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="450.05"/>
+      </position>
+    </ActiveArea>
+  <radiationLength value="93.6"/>
+  <PixelSize x="0.045" y="0.045"/>
+  </plane>
+  <plane nr="5" Type="TelescopePlane">
+        <pixel>
+     <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="600"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="600"/>
+      </position>
+    </pixel>
+    <ActiveArea>
+      <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="600"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="600"/>
+      </position>
+      <position nr="3">
+        <x pos="20"/>
+        <y pos="20"/>
+        <z pos="600"/>
+      </position>
+      <position nr="4">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="600.05"/>
+      </position>
+    </ActiveArea>
+  <radiationLength value="93.6"/>
+  <PixelSize x="0.045" y="0.045"/>
+  </plane>
+  <plane nr="6" Type="TelescopePlane">
+        <pixel>
+     <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="750"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="750"/>
+      </position>
+    </pixel>
+    <ActiveArea>
+      <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="750"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="750"/>
+      </position>
+      <position nr="3">
+        <x pos="20"/>
+        <y pos="20"/>
+        <z pos="750"/>
+      </position>
+      <position nr="4">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="750.05"/>
+      </position>
+    </ActiveArea>
+  <radiationLength value="93.6"/>
+  <PixelSize x="0.045" y="0.045"/>
+  </plane>
+</Planes>
+  <Beam>
+    <Type>Electrons</Type>
+    <mass>0.000511</mass> <!-- Particle mass in GeV -->
+    <charge>-1</charge>
+    <energy>5</energy><!-- Particle energy in GeV -->
+    <beamEnergySpread>0.5</beamEnergySpread><!-- Gaussian shape Energy spread in GeV -->
+    <beamCenterX>10</beamCenterX>  <!-- Distance from (0,0) in mm -->
+    <beamCenterY>5</beamCenterY>  <!-- Distance from (0,0) in mm -->
+    <beamSize>0</beamSize> <!-- Gaussian shape Beam size in mm -->
+  </Beam>
+</ConfigurationFile>
+

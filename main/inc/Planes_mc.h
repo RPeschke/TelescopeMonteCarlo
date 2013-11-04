@@ -1,5 +1,10 @@
 #ifndef Planes_h__
 #define Planes_h__
+#include "rapidxml.hpp"
+#include <string>
+#include <vector>
+
+
 /*! this Class should contain all informations aboud DUT and Telescops
 	The Telescopes and the DUT will just be planes with different values 
 
@@ -10,6 +15,7 @@
 
 */
 class Particle;
+
 namespace mcEUTEL{
 // 	struct particle
 // 	{
@@ -19,19 +25,26 @@ namespace mcEUTEL{
 	struct Positions
 	{
 		double x,y,z;
+		Positions():x(0),y(0),z(0){}
+		Positions(double X,double Y,double Z):x(X),y(Y),z(Z){}
 	};
 
 	class Planes{
 	public:
 
-		Planes(){};  
-		Planes(const Positions &p1,const Positions &p2,const Positions &p3,const Positions &p4){
+		Planes(rapidxml::xml_node<> *node);
+		Planes():hit_x(0),hit_y(0),name_(""){}  
+		Planes(const Positions &p1,const Positions &p2,const Positions &p3,const Positions &p4):hit_x(0),hit_y(0),name_(""){
 			p1_=p1;
 			p2_=p2;
 			p3_=p3;
 			p4_=p4;
 			thickness=p4_.z-p1_.z;
 		};
+		int ProcessXMLNode(rapidxml::xml_node<> *node);
+
+		int fitPlaneBetweenOtherPlanes(const Planes& beforePlane,const Planes& afterPlane);
+
 		void setRadiationLength(double radiationLength){
 			radiationLength_=radiationLength;
 		}
@@ -60,13 +73,16 @@ namespace mcEUTEL{
 			void getHit(const Particle& p);;
 			
 			double getZEndPos() const{return p4_.z;};
+			std::string name_;
 			bool write2file;
 			int hit_x,hit_y;
+
 	private:
 
 
-
+	
 		Positions p1_,p2_,p3_,p4_;
+		std::vector<Positions> positions_;
 		
 		double radiationLength_,thickness;
 		double pixelSizeX_,pixelSizeY_; /*!< the size of the Pixel in mm*/

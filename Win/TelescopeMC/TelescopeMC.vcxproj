@@ -120,7 +120,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ROOTSYS)\include\;..\..\main\inc\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ROOTSYS)\include\;..\..\main\inc\;..\..\extern\rapidxml-1.13\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,7 +138,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(rootsys)\include;..\..\main\inc\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(rootsys)\include;..\..\main\inc\;..\..\extern\rapidxml-1.13\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -234,19 +234,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\main\src\main_mc.cc" />
-    <ClCompile Include="..\..\main\src\material_mc.cc" />
     <ClCompile Include="..\..\main\src\particle_mc.cc" />
     <ClCompile Include="..\..\main\src\Planes_mc.cc" />
     <ClCompile Include="..\..\main\src\randomGen.cc" />
+    <ClCompile Include="..\..\main\src\TelescopeSetup_mc.cc" />
     <ClCompile Include="..\..\main\src\telescope_mc.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\main\inc\material_mc.h" />
-    <ClInclude Include="..\..\main\inc\montecarlo.h" />
+    <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml.hpp" />
+    <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml_iterators.hpp" />
+    <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml_print.hpp" />
+    <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml_utils.hpp" />
     <ClInclude Include="..\..\main\inc\particle_mc.h" />
     <ClInclude Include="..\..\main\inc\Planes_mc.h" />
     <ClInclude Include="..\..\main\inc\randomGen.h" />
+    <ClInclude Include="..\..\main\inc\TelescopeSetup_mc.h" />
     <ClInclude Include="..\..\main\inc\telescope_mc.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\conf\telescopSetup.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

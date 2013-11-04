@@ -2,6 +2,7 @@
 #define PARTICLEMC
 
 #include <string>
+#include "rapidxml.hpp"
 
 class Particle{
   private:
@@ -24,6 +25,7 @@ class Particle{
     void init(std::string name, double mass, double charge, 
               double energy, double beamsize, double beamspread,
               double beamcentrex, double beamcentrey);
+	int ProcessXMLNode(rapidxml::xml_node<> *node);
 
     std::string getName(){return Name_;}
     double getMass(){return Mass_;}
