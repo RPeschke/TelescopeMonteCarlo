@@ -222,15 +222,17 @@ mcEUTEL::Planes::BondaryLine::BondaryLine( const Positions &p1,const Positions&p
 
 	A=(p2.y-p1.y);
 	B=(p1.x-p2.x);
-	A/=sqrt(A*A+B*B);
-	B/=sqrt(A*A+B*B);
+	assert(B*p1.y+A*p1.x==B*p2.y+A*p2.x);
+	auto n=sqrt(A*A+B*B);
+	B/=n;
+	A/=n;
 	//A*y + B*x+C=0
 	// C= -A*y-B*x
 
 
 	C=-B*p1.y-A*p1.x;
 
-	assert(B*p1.y+A*p1.x==B*p2.y+A*p2.x);
+	
 
 }
 

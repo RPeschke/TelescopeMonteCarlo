@@ -200,7 +200,7 @@
   <plane nr="6" Type="TelescopePlane">
         <pixel>
      <position nr="1">
-        <x pos="0"/>
+        <x pos="-10"/>
         <y pos="0"/>
         <z pos="750"/>
       </position>
@@ -222,15 +222,35 @@
         <z pos="750"/>
       </position>
       <position nr="3">
-        <x pos="20"/>
-        <y pos="20"/>
+        <x pos="30"/>
+        <y pos="10"/>
         <z pos="750"/>
       </position>
       <position nr="4">
-        <x pos="0"/>
-        <y pos="20"/>
+        <x pos="30"/>
+        <y pos="30"/>
         <z pos="750"/>
       </position>
+      <position nr="5">
+        <x pos="20"/>
+        <y pos="40"/>
+        <z pos="750"/>
+      </position>
+      <position nr="6">
+        <x pos="0"/>
+        <y pos="40"/>
+        <z pos="750"/>
+      </position>
+      <position nr="7">
+        <x pos="-10"/>
+        <y pos="30"/>
+        <z pos="750"/>
+      </position> 
+      <position nr="8">
+        <x pos="-10"/>
+        <y pos="10"/>
+        <z pos="750"/>
+      </position>    
     </ActiveArea>
         <Thickness value="0.05"/>
   <radiationLength value="93.6"/>
