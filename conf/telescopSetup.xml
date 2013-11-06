@@ -33,10 +33,11 @@
       </position>
       <position nr="4">
         <x pos="0"/>
-        <y pos="0"/>
-        <z pos="0.05"/>
+        <y pos="20"/>
+        <z pos="0"/>
       </position>
     </ActiveArea>
+    <Thickness value="0.05"/>
   <radiationLength value="93.6"/>
   <PixelSize x="0.045" y="0.045"/>
   </plane>
@@ -71,10 +72,11 @@
       </position>
       <position nr="4">
         <x pos="0"/>
-        <y pos="0"/>
-        <z pos="150.05"/>
+        <y pos="20"/>
+        <z pos="150"/>
       </position>
     </ActiveArea>
+  <Thickness value="0.05"/>
   <radiationLength value="93.6"/>
   <PixelSize x="0.045" y="0.045"/>
   </plane>
@@ -109,10 +111,11 @@
       </position>
       <position nr="4">
         <x pos="0"/>
-        <y pos="0"/>
-        <z pos="300.05"/>
+        <y pos="20"/>
+        <z pos="300"/>
       </position>
     </ActiveArea>
+        <Thickness value="0.05"/>
   <radiationLength value="93.6"/>
   <PixelSize x="0.045" y="0.045"/>
   </plane>
@@ -147,10 +150,11 @@
       </position>
       <position nr="4">
         <x pos="0"/>
-        <y pos="0"/>
-        <z pos="450.05"/>
+        <y pos="20"/>
+        <z pos="450"/>
       </position>
     </ActiveArea>
+        <Thickness value="0.05"/>
   <radiationLength value="93.6"/>
   <PixelSize x="0.045" y="0.045"/>
   </plane>
@@ -185,10 +189,11 @@
       </position>
       <position nr="4">
         <x pos="0"/>
-        <y pos="0"/>
-        <z pos="600.05"/>
+        <y pos="20"/>
+        <z pos="600"/>
       </position>
     </ActiveArea>
+        <Thickness value="0.05"/>
   <radiationLength value="93.6"/>
   <PixelSize x="0.045" y="0.045"/>
   </plane>
@@ -223,10 +228,11 @@
       </position>
       <position nr="4">
         <x pos="0"/>
-        <y pos="0"/>
-        <z pos="750.05"/>
+        <y pos="20"/>
+        <z pos="750"/>
       </position>
     </ActiveArea>
+        <Thickness value="0.05"/>
   <radiationLength value="93.6"/>
   <PixelSize x="0.045" y="0.045"/>
   </plane>

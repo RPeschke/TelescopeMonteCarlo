@@ -6,6 +6,7 @@
 #include "particle_mc.h"
 #include "randomGen.h"
 #include "rapidxml.hpp"
+
 void higlandFormular(Particle& p,double relRadiationLength );
 void straigthForward(Particle& p,double distance );
 int getPosition(rapidxml::xml_node<> *node,mcEUTEL::Positions & p);
@@ -36,9 +37,7 @@ void mcEUTEL::Planes::propagate( Particle& p )
 
 void mcEUTEL::Planes::getHit( const Particle& p )
 {
-	if (p.x>p1_.x&&p.x<p2_.x
-		&& 
-		p.y>p1_.y&&p.y<p3_.y)
+	if (Vec_isInsideBoundaries(p))
 	{
 		hit_x=static_cast<int>((p.x-p1_.x)/pixelSizeX_);
 		hit_y=static_cast<int>((p.y-p1_.y)/pixelSizeY_);
@@ -53,36 +52,30 @@ int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 	if(strcmp(node->name(),"plane")) return -1; // to make sure that the correct node is used
 		
 	//auto position= node->first_node("positions");
-	Positions p;
+	
 	int posNr=0;
-	for (auto position= node->first_node("ActiveArea")->first_node("position");position;position=position->next_sibling())
+	Positions newP,oldP,firstP;
+	auto position= node->first_node("ActiveArea")->first_node("position");
+	getPosition(position,oldP);
+	firstP=oldP;
+	for (position=position->next_sibling();position;position=position->next_sibling())
 	{
 		
-		posNr=std::atoi(position->first_attribute("nr")->value());
-		switch (posNr)
-		{
-		case 1:
-			getPosition(position,p1_);
-			break;
-		case 2:
-			getPosition(position,p2_);
-			break;
-		case 3:
-			getPosition(position,p3_);
-			break;
-		case 4:
-			getPosition(position,p4_);
-			break;
-		}
-
+		
+			getPosition(position,newP);
+			Bondary_.push_back(BondaryLine(oldP,newP));
+			oldP=newP;
 
 	}
+			Bondary_.push_back(BondaryLine(newP,firstP));
+
 	name_=node->first_attribute("Type")->value();
 	//std::cout<<name_<<std::endl;
 	radiationLength_=std::atof(node->first_node("radiationLength")->first_attribute("value")->value());
 	pixelSizeX_=std::atof(node->first_node("PixelSize")->first_attribute("x")->value());
+
 	pixelSizeY_=std::atof(node->first_node("PixelSize")->first_attribute("y")->value());
-	thickness=p4_.z-p1_.z;
+	thickness=std::atof(node->first_node("Thickness")->first_attribute("value")->value());
 	return 1;
 }
 
@@ -109,6 +102,20 @@ int mcEUTEL::Planes::fitPlaneBetweenOtherPlanes( const Planes& beforePlane,const
 
 	thickness=p4_.z-p1_.z;
 	return 1;
+}
+
+bool mcEUTEL::Planes::Vec_isInsideBoundaries( const Particle& par )
+{
+	bool returnValue=true;
+	for (auto e:Bondary_)
+	{
+		returnValue*=e.isInsideBoundary(par);
+		if (!returnValue)
+		{
+			break;
+		}
+	}
+	return returnValue;
 }
 
 int getPosition(rapidxml::xml_node<> *node,mcEUTEL::Positions & p){
@@ -195,7 +202,78 @@ mcEUTEL::Planes mcEUTEL::makeAirPlane( double zStart,double ZEnd )
 	return p;
 }
 
-mcEUTEL::Planes mcEUTEL::makeAirPlane( const Planes& PreviousPlane,double ZEnd )
-{
+mcEUTEL::Planes mcEUTEL::makeAirPlane( const Planes& PreviousPlane,double ZEnd ){
 	return makeAirPlane(PreviousPlane.getZEndPos(),ZEnd);
+}
+
+mcEUTEL::Planes::BondaryLine::BondaryLine( const Positions &p1,const Positions&p2 )
+{
+
+
+
+
+	B=(p2.y-p1.y);
+	A=(p1.x-p2.x);
+	//A*y + B*x+C=0
+	// C= -A*y-B*x
+
+
+	C=-A*p1.y-B*p1.x;
+
+	assert(A*p1.y+B*p1.x==A*p2.y+B*p2.x);
+
+}
+
+bool mcEUTEL::Planes::BondaryLine::isInsideBoundary( const Positions& pos )
+{
+/*  defines if A point is "left" or "right" from this line. The orientation of 
+	the line is defined from pos1 to pos2. the line is continued till +- inf.
+	An Example
+
+
+
+	   pos2       *
+	             /
+	            /
+   "inside"    /
+	          /    "Outside"
+	         /
+            /
+    pos1   *          
+
+
+	if pos1 and two would switch then inside and outside would switch too.
+	if the point is on the line it counts as "inside".
+
+*/
+
+	return A*pos.y+B*pos.x +C<=0;
+
+	
+
+}
+
+bool mcEUTEL::Planes::BondaryLine::isInsideBoundary( const Particle& par )
+{
+return A*par.y+B*par.x +C<=0;
+}
+
+
+mcEUTEL::Planes::hyperPlane::hyperPlane( const Positions& pos1,const Positions& pos2,const Positions& pos3 )
+{
+	double a1=pos2.x-pos1.x;
+	double a2=pos2.y-pos1.y;
+	double a3=pos2.z-pos1.z;
+
+	double b1=pos3.x-pos1.x;
+	double b2=pos3.y-pos1.y;
+	double b3=pos3.z-pos1.z;
+
+
+	A=a2*b3-a3*b2;
+	B=a3*b1-a1*b3;
+	C=a1*b2-a2*b1;
+
+	D=-(A*pos1.x+B*pos1.y+C*pos1.z);
+
 }
