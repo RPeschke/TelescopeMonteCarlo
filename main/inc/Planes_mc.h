@@ -5,7 +5,7 @@
 #include <vector>
 
 
-/*! this Class should contain all informations aboud DUT and Telescops
+/*! this Class should contain all informations about DUT and Telescopes
 	The Telescopes and the DUT will just be planes with different values 
 
 

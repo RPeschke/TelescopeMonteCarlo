@@ -183,7 +183,7 @@ void mcEUTEL::Disp( const Particle& p )
 mcEUTEL::Planes mcEUTEL::makeTelescopePlane( double zPosition )
 {
 	
-	Planes p; //dummy delescope plane without position information 
+	Planes p; //dummy telescope plane without position information 
 	p.setRadiationLength(93.6);//Silicon (Si). 9.36 cm
 	p.setPixelSize(1,0.045);
 	p.setPixelSize(2,0.045);
