@@ -34,13 +34,13 @@ namespace mcEUTEL{
 
 		Planes(rapidxml::xml_node<> *node);
 		Planes():hit_x(0),hit_y(0),name_(""){}  
-		Planes(const Positions &p1,const Positions &p2,const Positions &p3,const Positions &p4):hit_x(0),hit_y(0),name_(""){
-			p1_=p1;
-			p2_=p2;
-			p3_=p3;
-			p4_=p4;
-			thickness=p4_.z-p1_.z;
-		};
+// 		Planes(const Positions &p1,const Positions &p2,const Positions &p3,const Positions &p4):hit_x(0),hit_y(0),name_(""){
+// 			p1_=p1;
+// 			p2_=p2;
+// 			p3_=p3;
+// 			p4_=p4;
+// 			thickness=p4_.z-p1_.z;
+// 		};
 		int ProcessXMLNode(rapidxml::xml_node<> *node);
 
 		int fitPlaneBetweenOtherPlanes(const Planes& beforePlane,const Planes& afterPlane);
@@ -72,7 +72,7 @@ namespace mcEUTEL{
 			*/
 			void getHit(const Particle& p);;
 			
-			double getZEndPos() const{return p4_.z;};
+			double getZEndPos() const{return -(FrontPlane.D/FrontPlane.C);};// positionat x=0 y=0
 			std::string name_;
 			bool write2file;
 			int hit_x,hit_y;
@@ -81,27 +81,31 @@ namespace mcEUTEL{
 
 
 		struct hyperPlane{
-			double A,B,C,D; // A*x + B*y + C*z +D =0
+			double A,B,C,D,LengthOfNormVec; // A*x + B*y + C*z +D =0
 		 double normalDistanceToPLane(const Particle& p);
 		 void MetsPlaneAt(const Particle& Par,Positions& pos);
+		 void PropagateToPlane(Particle& par);
 		 void ShiftPositionNormalToPlane(Positions& pos,double distnace);
+		 void makeHyperPlane(const Positions& pos1,const Positions& pos2, const Positions& pos3);
 		 hyperPlane(const Positions& pos1,const Positions& pos2,const Positions& pos3);
+		 hyperPlane():A(0),B(0),C(0),D(0),LengthOfNormVec(0){}
 		}FrontPlane, BackPlane;
 
 
 		struct BondaryLine{
-			double A,B,C;// A*y +B*x+C=0
+			double A,B,C;// A*x +B*y+C=0
 		    	
 			bool isInsideBoundary(const Positions& pos);
 			bool isInsideBoundary(const Particle& par);
-			//double normalDistanceToLine(const Particle& p);// z coordinate gets ignored
+			double normalDistanceToLine(const Particle& p);// z coordinate gets ignored
 			BondaryLine(const Positions &p1,const Positions&p2);
-
+			BondaryLine():A(0),B(0),C(0){}
 		};
 		
-		Positions p1_,p2_,p3_,p4_;
+		//Positions p1_,p2_,p3_,p4_;
 		std::vector<Positions> positions_;
 		std::vector<BondaryLine> Bondary_;
+		BondaryLine yZeroLine,xZeroLine;
 		bool Vec_isInsideBoundaries(const Particle& par);
 		double radiationLength_,thickness;
 		double pixelSizeX_,pixelSizeY_; /*!< the size of the Pixel in mm*/

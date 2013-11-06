@@ -8,3 +8,6 @@ Win/TelescopeMC/Release/*
 *.lastbuildstate
 *.log
 *.unsuccessfulbuild
+Win/Debug/*
+win/Release/*
+Win/Debug/

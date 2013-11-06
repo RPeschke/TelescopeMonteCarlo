@@ -40,7 +40,7 @@ public:
 			plane_id=0;
 			t.newParticle();	
 			//	Disp(t);
-			if (i%1000==0)
+			if (i%10000==0)
 			{
 				cout<<i<<endl;
 

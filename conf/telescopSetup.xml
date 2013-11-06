@@ -245,7 +245,7 @@
     <beamEnergySpread>0.5</beamEnergySpread><!-- Gaussian shape Energy spread in GeV -->
     <beamCenterX>10</beamCenterX>  <!-- Distance from (0,0) in mm -->
     <beamCenterY>5</beamCenterY>  <!-- Distance from (0,0) in mm -->
-    <beamSize>0</beamSize> <!-- Gaussian shape Beam size in mm -->
+    <beamSize>20</beamSize> <!-- Gaussian shape Beam size in mm -->
   </Beam>
 </ConfigurationFile>
 
