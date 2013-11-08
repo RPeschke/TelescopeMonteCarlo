@@ -13,3 +13,4 @@ win/Release/*
 Win/Debug/
 Win/Debug/TelescopeMC.exe
 Win/Release/TelescopeMC.exe
+Win/Release/TelescopeMC.pdb
