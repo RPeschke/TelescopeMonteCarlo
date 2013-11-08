@@ -31,7 +31,6 @@ bool mcEUTEL::Planes::setPixelSize( const int oriantaion,const double PixelSize 
 void mcEUTEL::Planes::propagate( Particle& p )
 {
 	higlandFormular(p,thickness/radiationLength_);
-	//straigthForward(p,thickness);
 	BackPlane.PropagateToPlane(p);
 }
 
@@ -43,74 +42,91 @@ void mcEUTEL::Planes::getHit( const Particle& p )
 		hit_y=static_cast<int>(yZeroLine.normalDistanceToLine(p)/pixelSizeY_);
 		hit_x=static_cast<int>(xZeroLine.normalDistanceToLine(p)/pixelSizeX_);
 
-		//hit_x=static_cast<int>((p.x-p1_.x)/pixelSizeX_);
-		//hit_y=static_cast<int>((p.y-p1_.y)/pixelSizeY_);
+
 	}else				{
 		hit_x=0;
 		hit_x=0;
 	}
 }
+std::vector<mcEUTEL::Positions> XMLExtractPositions( rapidxml::xml_node<> *position ){
+	
+	std::vector<mcEUTEL::Positions> ReturnValue;
+	mcEUTEL::Positions p;
+// 	auto position= node->first_node("ActiveArea")->first_node("position");
+// 	getPosition(position,oldP);
+	
+	
+	for (;position;position=position->next_sibling())
+	{
 
+		
+		getPosition(position,p);
+		ReturnValue.push_back(mcEUTEL::Positions(p));
+	}
+	return ReturnValue;
+}
 int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 {
 	if(strcmp(node->name(),"plane")) return -1; // to make sure that the correct node is used
 	
-	name_=node->first_attribute("Type")->value();
-	//std::cout<<name_<<std::endl;
-	radiationLength_=std::atof(node->first_node("radiationLength")->first_attribute("value")->value());
-	pixelSizeX_=std::atof(node->first_node("PixelSize")->first_attribute("x")->value());
 
-	pixelSizeY_=std::atof(node->first_node("PixelSize")->first_attribute("y")->value());
+	name_=node->first_attribute("Type")->value();
+	radiationLength_=std::atof(node->first_node("radiationLength")->first_attribute("value")->value());
 	thickness=std::atof(node->first_node("Thickness")->first_attribute("value")->value());
 
-	auto PixelPos1= node->first_node("pixel")->first_node("position");
-	auto PixelPos2= node->first_node("pixel")->first_node("position")->next_sibling();
-
-	Positions px1,px2,py2;
-	getPosition(PixelPos1,px1);
-	getPosition(PixelPos2,px2);
-	yZeroLine=BondaryLine(px1,px2);
-	py2.x=px2.y-px1.y+px1.x;
-	py2.y=px1.x-px2.x+px1.y;
-	py2.z=px1.z;
-	xZeroLine=BondaryLine(px1,py2);
-
-
-	//auto position= node->first_node("positions");
+	pixelSizeX_=std::atof(node->first_node("PixelSize")->first_attribute("x")->value());
+	pixelSizeY_=std::atof(node->first_node("PixelSize")->first_attribute("y")->value());
 	
-	int posNr=0;
-	Positions newP,oldP,firstP;
-	auto position= node->first_node("ActiveArea")->first_node("position");
-	getPosition(position,oldP);
-	firstP=oldP;
-	int j=0;
-	for (position=position->next_sibling();position;position=position->next_sibling())
+
+	//////////////////////////////////////////////////////////////////////////
+	// extracts the information where to put the x,y Axis for the pixel
+	auto PixelAxis=XMLExtractPositions(node->first_node("pixel")->first_node("position"));// x-Axis of the Pixel Koordinate system
+
+
+	yZeroLine=BondaryLine(PixelAxis.at(0),PixelAxis.at(1)); //y is zero at the x-Axis sorry for the notation 
+
+	// create a vector that is orthogonal on the vector PixelAxis.at(0)  ---> PixelAxis.at(1)
+	Positions py2; // the vector from PixelAxis.at(0) to py2 is orthogonal (in 2 dimensions) 
+				   // to the vector PixelAxis.at(0)  ---> PixelAxis.at(1)
+	py2.x=PixelAxis.at(1).y-PixelAxis.at(0).y+PixelAxis.at(0).x;
+	py2.y=PixelAxis.at(0).x-PixelAxis.at(1).x+PixelAxis.at(1).y;
+	py2.z=PixelAxis.at(0).z;
+	xZeroLine=BondaryLine(PixelAxis.at(0),py2);
+
+
+	//////////////////////////////////////////////////////////////////////////
+	// Extracts the Positions for the Boundary lines
+	auto BoundaryPositions=XMLExtractPositions(node->first_node("ActiveArea")->first_node("position"));
+	BoundaryPositions.push_back(Positions(BoundaryPositions.at(0))); // close the circle 
+	
+	for (int i=1;i<BoundaryPositions.size();++i)
 	{
-		
-		j++;
-			getPosition(position,newP);
-			Bondary_.push_back(BondaryLine(oldP,newP));
-			if (j==2)
-			{
-				Positions p1=firstP,p2=oldP,p3=newP;
-				FrontPlane.makeHyperPlane(p1,p2,p3);
-				FrontPlane.ShiftPositionNormalToPlane(p1,thickness);
-				FrontPlane.ShiftPositionNormalToPlane(p2,thickness);
-				FrontPlane.ShiftPositionNormalToPlane(p3,thickness);
-				
-				BackPlane.makeHyperPlane(p1,p2,p3);
-
-				// shrink pixel size for the projection
-
-				double cosAlpha=(xZeroLine.A*FrontPlane.A+xZeroLine.B*FrontPlane.B)/sqrt(FrontPlane.A*FrontPlane.A + FrontPlane.B*FrontPlane.B+FrontPlane.C*FrontPlane.C);
-				double cosBeta=(yZeroLine.A*FrontPlane.A+yZeroLine.B*FrontPlane.B)/sqrt(FrontPlane.A*FrontPlane.A + FrontPlane.B*FrontPlane.B+FrontPlane.C*FrontPlane.C);
-				pixelSizeX_*=sqrt(1-cosAlpha*cosAlpha);
-				pixelSizeY_*=sqrt(1-cosBeta*cosBeta);
-			}
-			oldP=newP;
-
+		Bondary_.push_back(BondaryLine(BoundaryPositions.at(i-1),BoundaryPositions.at(i)));
 	}
-			Bondary_.push_back(BondaryLine(newP,firstP));
+
+
+	//////////////////////////////////////////////////////////////////////////
+	// Make Hyper planes 
+	// only the first 3 positions are used needs to be improved in a later Version
+	Positions p1=BoundaryPositions.at(0),p2=BoundaryPositions.at(1),p3=BoundaryPositions.at(2);
+
+	FrontPlane.makeHyperPlane(p1,p2,p3);
+	FrontPlane.ShiftPositionNormalToPlane(p1,thickness);
+	FrontPlane.ShiftPositionNormalToPlane(p2,thickness);
+	FrontPlane.ShiftPositionNormalToPlane(p3,thickness);
+
+	BackPlane.makeHyperPlane(p1,p2,p3);
+	
+	//////////////////////////////////////////////////////////////////////////
+	// shrink pixel size for the projection
+	// since the hyper plane can be tilted against the x,y plane the "Projected Pixel size"  shrinks
+	// 
+	double cosAlpha=(xZeroLine.A*FrontPlane.A+xZeroLine.B*FrontPlane.B)/sqrt(FrontPlane.A*FrontPlane.A + FrontPlane.B*FrontPlane.B+FrontPlane.C*FrontPlane.C);
+	double cosBeta=(yZeroLine.A*FrontPlane.A+yZeroLine.B*FrontPlane.B)/sqrt(FrontPlane.A*FrontPlane.A + FrontPlane.B*FrontPlane.B+FrontPlane.C*FrontPlane.C);
+	pixelSizeX_*=sqrt(1-cosAlpha*cosAlpha);
+	pixelSizeY_*=sqrt(1-cosBeta*cosBeta);
+
+
 
 
 	return 1;
@@ -143,16 +159,10 @@ bool mcEUTEL::Planes::Vec_isInsideBoundaries( const Particle& par )
 int getPosition(rapidxml::xml_node<> *node,mcEUTEL::Positions & p){
 if(strcmp(node->name(),"position")) return -1; // to make sure that the correct node is used
 
-//auto x=node->first_node("x")->first_attribute()->value();
 
 p.x=std::atof(node->first_node("x")->first_attribute()->value());
 
-//auto y=node->first_node("y")->first_attribute()->value();
-
 p.y=std::atof(node->first_node("y")->first_attribute()->value());
-
-
-//auto y=node->first_node("y")->first_attribute()->value();
 
 p.z=std::atof(node->first_node("z")->first_attribute()->value());
 return 1;
