@@ -33,9 +33,6 @@
     <ClCompile Include="..\..\main\src\particle_mc.cc">
       <Filter>main\Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\main\src\telescope_mc.cc">
-      <Filter>main\Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\main\src\Planes_mc.cc">
       <Filter>main\Quelldateien</Filter>
     </ClCompile>
@@ -48,9 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\main\inc\particle_mc.h">
-      <Filter>main\Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\main\inc\telescope_mc.h">
       <Filter>main\Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\..\main\inc\Planes_mc.h">

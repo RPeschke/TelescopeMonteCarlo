@@ -238,7 +238,6 @@
     <ClCompile Include="..\..\main\src\Planes_mc.cc" />
     <ClCompile Include="..\..\main\src\randomGen.cc" />
     <ClCompile Include="..\..\main\src\TelescopeSetup_mc.cc" />
-    <ClCompile Include="..\..\main\src\telescope_mc.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml.hpp" />
@@ -249,7 +248,6 @@
     <ClInclude Include="..\..\main\inc\Planes_mc.h" />
     <ClInclude Include="..\..\main\inc\randomGen.h" />
     <ClInclude Include="..\..\main\inc\TelescopeSetup_mc.h" />
-    <ClInclude Include="..\..\main\inc\telescope_mc.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\conf\telescopSetup.xml" />

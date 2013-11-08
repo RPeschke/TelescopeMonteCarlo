@@ -100,6 +100,12 @@ int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 				
 				BackPlane.makeHyperPlane(p1,p2,p3);
 
+				// shrink pixel size for the projection
+
+				double cosAlpha=(xZeroLine.A*FrontPlane.A+xZeroLine.B*FrontPlane.B)/sqrt(FrontPlane.A*FrontPlane.A + FrontPlane.B*FrontPlane.B+FrontPlane.C*FrontPlane.C);
+				double cosBeta=(yZeroLine.A*FrontPlane.A+yZeroLine.B*FrontPlane.B)/sqrt(FrontPlane.A*FrontPlane.A + FrontPlane.B*FrontPlane.B+FrontPlane.C*FrontPlane.C);
+				pixelSizeX_*=sqrt(1-cosAlpha*cosAlpha);
+				pixelSizeY_*=sqrt(1-cosBeta*cosBeta);
 			}
 			oldP=newP;
 

@@ -29,12 +29,12 @@
       <position nr="3">
         <x pos="20"/>
         <y pos="20"/>
-        <z pos="0"/>
+        <z pos="10"/>
       </position>
       <position nr="4">
         <x pos="0"/>
         <y pos="20"/>
-        <z pos="0"/>
+        <z pos="10"/>
       </position>
     </ActiveArea>
     <Thickness value="0.05"/>
@@ -45,7 +45,7 @@
     <pixel>
      <position nr="1">
         <x pos="0"/>
-        <y pos="0"/>
+        <y pos="-10"/>
         <z pos="150"/>
       </position>
       <position nr="2">
