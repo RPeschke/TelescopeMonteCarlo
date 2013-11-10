@@ -87,6 +87,7 @@ namespace mcEUTEL{
 		 void PropagateToPlane(Particle& par);
 		 void ShiftPositionNormalToPlane(Positions& pos,double distnace);
 		 void makeHyperPlane(const Positions& pos1,const Positions& pos2, const Positions& pos3);
+		 void fitHyperPlane(std::vector<Positions>& pos);
 		 hyperPlane(const Positions& pos1,const Positions& pos2,const Positions& pos3);
 		 hyperPlane():A(0),B(0),C(0),D(0),LengthOfNormVec(0){}
 		}FrontPlane, BackPlane;

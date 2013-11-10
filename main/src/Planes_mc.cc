@@ -80,7 +80,7 @@ int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 
 	//////////////////////////////////////////////////////////////////////////
 	// extracts the information where to put the x,y Axis for the pixel
-	auto PixelAxis=XMLExtractPositions(node->first_node("pixel")->first_node("position"));// x-Axis of the Pixel Koordinate system
+	auto PixelAxis=XMLExtractPositions(node->first_node("pixel")->first_node("position"));// x-Axis of the Pixel coordinate system
 
 
 	yZeroLine=BondaryLine(PixelAxis.at(0),PixelAxis.at(1)); //y is zero at the x-Axis sorry for the notation 
@@ -106,16 +106,16 @@ int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 
 
 	//////////////////////////////////////////////////////////////////////////
-	// Make Hyper planes 
-	// only the first 3 positions are used needs to be improved in a later Version
-	Positions p1=BoundaryPositions.at(0),p2=BoundaryPositions.at(1),p3=BoundaryPositions.at(2);
+	// fits Position to a plane
+	FrontPlane.fitHyperPlane(BoundaryPositions);
 
-	FrontPlane.makeHyperPlane(p1,p2,p3);
-	FrontPlane.ShiftPositionNormalToPlane(p1,thickness);
-	FrontPlane.ShiftPositionNormalToPlane(p2,thickness);
-	FrontPlane.ShiftPositionNormalToPlane(p3,thickness);
+	for (auto  p=0; p<BoundaryPositions.size();++p)
+	{
+		FrontPlane.ShiftPositionNormalToPlane(BoundaryPositions.at(p),thickness);
+	}
 
-	BackPlane.makeHyperPlane(p1,p2,p3);
+
+	BackPlane.fitHyperPlane(BoundaryPositions);
 	
 	//////////////////////////////////////////////////////////////////////////
 	// shrink pixel size for the projection
@@ -346,4 +346,71 @@ void mcEUTEL::Planes::hyperPlane::ShiftPositionNormalToPlane( Positions& pos,dou
 	pos.x+=A*distnace/LengthOfNormVec;
 	pos.y+=B*distnace/LengthOfNormVec;
 	pos.z+=C*distnace/LengthOfNormVec;
+}
+
+
+void mcEUTEL::Planes::hyperPlane::fitHyperPlane( std::vector<Positions>& pos )
+{
+	// making this fit with least square estimator is in principle just solving a linear equation system:
+	// chi^2= sum (z_i - A*x_i -B*y_i-D)^2
+	// I: d chi^2/dA= sum (x_i* (z_i - A*x_i -B*y_i-D))=0
+	// II: d chi^2/dB= sum (y_i* (z_i - A*x_i -B*y_i-D))=0
+	// III: d chi^2/dD= sum (z_i - A*x_i -B*y_i-D)=0
+	// rewritten to 
+	// I: 0=sumXZ - A*sumXX - B*sumXY -D*sumX
+	// II: 0=sumYZ - A*sumXY - B * sumYY -D*sumY
+	// III: 0=sumZ- A*sumX - B* sumY - D*N
+	// with N number of entries
+
+	
+	double sumXZ=0,sumXX=0,sumXY=0,sumX=0,sumYZ=0,sumYY=0,sumY=0,sumZ=0,N=pos.size();
+
+
+	for (auto p:pos)
+	{
+		sumXZ+=p.x*p.z;
+		sumXY+=p.x*p.y;
+		sumXX+=p.x*p.x;
+		sumX+=p.x;
+		sumYZ+=p.y*p.z;
+		sumYY+=p.y*p.y;
+		sumY+=p.y;
+		sumZ+=p.z;
+
+	}
+
+	auto det =[](double a11,double a12,double a13, 
+		         double a21,double a22,double a23,
+				 double a31,double a32,double a33) -> double 
+	{return (a11*a22*a33+ a13*a21*a32+a12*a23*a31)-(a31*a22*a13+a21*a12*a33+a11*a23*a32);};
+
+	double denominator=det(sumXX,sumXY,sumX,
+		                   sumXY,sumYY,sumY,
+						   sumX,sumY,N);
+
+	if (denominator==0)
+	{
+		// don't divide by zero
+		std::cout<<"could note make hyperplane \n";
+		return;
+
+	}
+	double ANumerator =det(sumXZ,sumXY,sumX,
+		                   sumYZ,sumYY,sumY,
+						   sumZ,sumY  ,N     );
+
+	double BNumerator =det(sumXX,sumXZ,sumX,
+		                   sumXY,sumYZ,sumY,
+						   sumX,sumZ  ,N     );
+
+
+	double DNumerator =det(sumXX,sumXY,sumXZ,
+		                   sumXY,sumYY,sumYZ,
+						   sumX,sumY  ,sumZ    );
+
+	A=-ANumerator/denominator;
+	B=-BNumerator/denominator;
+	C=1;
+	D=-DNumerator/denominator;
+	LengthOfNormVec=sqrt(A*A +B*B+C*C);
 }
