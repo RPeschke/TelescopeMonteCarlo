@@ -8,6 +8,10 @@
 #include <iostream>
 #include "particle_mc.h"
 #include "randomGen.h"
+#include "rapidxml_print.hpp"
+#include <string>
+#include <map>
+#include "XMLHelpers.h"
 using namespace std;
 using namespace mcEUTEL;
 using namespace rapidxml;
@@ -97,10 +101,14 @@ public:
 
 
 		//xml_node<> *node = doc.first_node()->first_node();
+		XMLPreparser(doc);
+			
+	//	print(std::cout, doc, 0);
+		//doc.allocate_node("newName");
+		
+	//	node->append_node(node1);
 
 		auto node = doc.first_node("ConfigurationFile")->first_node("Planes")->first_node("plane");
-
-		
 		pl.push_back(Planes(node));
 		for (node = node->next_sibling("plane");node;node=node->next_sibling("plane"))
 		{

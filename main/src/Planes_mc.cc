@@ -6,6 +6,8 @@
 #include "particle_mc.h"
 #include "randomGen.h"
 #include "rapidxml.hpp"
+#include "Positions_mc.h"
+#include "XMLHelpers.h"
 
 void higlandFormular(Particle& p,double relRadiationLength );
 void straigthForward(Particle& p,double distance );
@@ -48,23 +50,10 @@ void mcEUTEL::Planes::getHit( const Particle& p )
 		hit_x=0;
 	}
 }
-std::vector<mcEUTEL::Positions> XMLExtractPositions( rapidxml::xml_node<> *position ){
-	
-	std::vector<mcEUTEL::Positions> ReturnValue;
-	mcEUTEL::Positions p;
-// 	auto position= node->first_node("ActiveArea")->first_node("position");
-// 	getPosition(position,oldP);
-	
-	
-	for (;position;position=position->next_sibling())
-	{
 
-		
-		getPosition(position,p);
-		ReturnValue.push_back(mcEUTEL::Positions(p));
-	}
-	return ReturnValue;
-}
+
+
+
 int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 {
 	if(strcmp(node->name(),"plane")) return -1; // to make sure that the correct node is used
@@ -81,9 +70,10 @@ int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 	//////////////////////////////////////////////////////////////////////////
 	// extracts the information where to put the x,y Axis for the pixel
 	auto PixelAxis=XMLExtractPositions(node->first_node("pixel")->first_node("position"));// x-Axis of the Pixel coordinate system
+	XMLModifyPositions(PixelAxis,node->first_node("modifyPlane"));
+//	std::cout<<node->first_node("modifyActiveArea")->value()<<std::endl;
 
-
-	yZeroLine=BondaryLine(PixelAxis.at(0),PixelAxis.at(1)); //y is zero at the x-Axis sorry for the notation 
+	yZeroLine=BoundaryLine(PixelAxis.at(0),PixelAxis.at(1)); //y is zero at the x-Axis sorry for the notation 
 
 	// create a vector that is orthogonal on the vector PixelAxis.at(0)  ---> PixelAxis.at(1)
 	Positions py2; // the vector from PixelAxis.at(0) to py2 is orthogonal (in 2 dimensions) 
@@ -91,17 +81,17 @@ int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 	py2.x=PixelAxis.at(1).y-PixelAxis.at(0).y+PixelAxis.at(0).x;
 	py2.y=PixelAxis.at(0).x-PixelAxis.at(1).x+PixelAxis.at(1).y;
 	py2.z=PixelAxis.at(0).z;
-	xZeroLine=BondaryLine(PixelAxis.at(0),py2);
+	xZeroLine=BoundaryLine(PixelAxis.at(0),py2);
 
 
 	//////////////////////////////////////////////////////////////////////////
 	// Extracts the Positions for the Boundary lines
 	auto BoundaryPositions=XMLExtractPositions(node->first_node("ActiveArea")->first_node("position"));
 	BoundaryPositions.push_back(Positions(BoundaryPositions.at(0))); // close the circle 
-	
+	XMLModifyPositions(BoundaryPositions,node->first_node("modifyPlane"));
 	for (int i=1;i<BoundaryPositions.size();++i)
 	{
-		Bondary_.push_back(BondaryLine(BoundaryPositions.at(i-1),BoundaryPositions.at(i)));
+		Boundary_.push_back(BoundaryLine(BoundaryPositions.at(i-1),BoundaryPositions.at(i)));
 	}
 
 
@@ -109,9 +99,9 @@ int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 	// fits Position to a plane
 	FrontPlane.fitHyperPlane(BoundaryPositions);
 
-	for (auto  p=0; p<BoundaryPositions.size();++p)
+	for (auto&  p:BoundaryPositions)
 	{
-		FrontPlane.ShiftPositionNormalToPlane(BoundaryPositions.at(p),thickness);
+		FrontPlane.ShiftPositionNormalToPlane(p,thickness);
 	}
 
 
@@ -145,7 +135,7 @@ BackPlane=afterPlane.FrontPlane;
 bool mcEUTEL::Planes::Vec_isInsideBoundaries( const Particle& par )
 {
 	
-	for (auto e:Bondary_)
+	for (auto e:Boundary_)
 	{
 	
 		if (!e.isInsideBoundary(par))
@@ -156,17 +146,7 @@ bool mcEUTEL::Planes::Vec_isInsideBoundaries( const Particle& par )
 	return true;
 }
 
-int getPosition(rapidxml::xml_node<> *node,mcEUTEL::Positions & p){
-if(strcmp(node->name(),"position")) return -1; // to make sure that the correct node is used
 
-
-p.x=std::atof(node->first_node("x")->first_attribute()->value());
-
-p.y=std::atof(node->first_node("y")->first_attribute()->value());
-
-p.z=std::atof(node->first_node("z")->first_attribute()->value());
-return 1;
-}
 
 void higlandFormular(Particle& p,double relRadiationLength ){
 
@@ -230,7 +210,7 @@ mcEUTEL::Planes mcEUTEL::makeAirPlane( const Planes& PreviousPlane,double ZEnd )
 	return makeAirPlane(PreviousPlane.getZEndPos(),ZEnd);
 }
 
-mcEUTEL::Planes::BondaryLine::BondaryLine( const Positions &p1,const Positions&p2 )
+mcEUTEL::Planes::BoundaryLine::BoundaryLine( const Positions &p1,const Positions&p2 )
 {
 
 
@@ -252,7 +232,7 @@ mcEUTEL::Planes::BondaryLine::BondaryLine( const Positions &p1,const Positions&p
 
 }
 
-bool mcEUTEL::Planes::BondaryLine::isInsideBoundary( const Positions& pos )
+bool mcEUTEL::Planes::BoundaryLine::isInsideBoundary( const Positions& pos )
 {
 /*  defines if A point is "left" or "right" from this line. The orientation of 
 	the line is defined from pos1 to pos2. the line is continued till +- inf.
@@ -281,12 +261,12 @@ bool mcEUTEL::Planes::BondaryLine::isInsideBoundary( const Positions& pos )
 
 }
 
-bool mcEUTEL::Planes::BondaryLine::isInsideBoundary( const Particle& par )
+bool mcEUTEL::Planes::BoundaryLine::isInsideBoundary( const Particle& par )
 {
 return B*par.y+A*par.x +C<=0;
 }
 
-double mcEUTEL::Planes::BondaryLine::normalDistanceToLine( const Particle& p )
+double mcEUTEL::Planes::BoundaryLine::normalDistanceToLine( const Particle& p )
 {
 	return -(A*p.x+B*p.y+C);
 }
@@ -322,7 +302,7 @@ double mcEUTEL::Planes::hyperPlane::normalDistanceToPLane( const Particle& p )
 	return (A*p.x+B*p.y+C*p.z+D)/LengthOfNormVec;
 }
 
-void mcEUTEL::Planes::hyperPlane::MetsPlaneAt( const Particle& Par,Positions& pos )
+void mcEUTEL::Planes::hyperPlane::MeetsPlaneAt( const Particle& Par,Positions& pos )
 {
 	double t=-((A*Par.x+B*Par.y+C*Par.z+D)/(A*tan(Par.phi)+B*tan(Par.theta)+C));
 

@@ -3,6 +3,7 @@
 #include "rapidxml.hpp"
 #include <string>
 #include <vector>
+#include "Positions_mc.h"
 
 
 /*! this Class should contain all informations about DUT and Telescopes
@@ -17,18 +18,13 @@
 class Particle;
 
 namespace mcEUTEL{
-// 	struct particle
+	
+	// 	struct particle
 // 	{
 // 		double x,y,z,phi,theta,energy;
 // 	};
-	void Disp(const Particle& p);
-	struct Positions
-	{
-		double x,y,z;
-		Positions():x(0),y(0),z(0){}
-		Positions(double X,double Y,double Z):x(X),y(Y),z(Z){}
-	};
 
+	void Disp(const Particle& p);
 	class Planes{
 	public:
 
@@ -83,7 +79,7 @@ namespace mcEUTEL{
 		struct hyperPlane{
 			double A,B,C,D,LengthOfNormVec; // A*x + B*y + C*z +D =0
 		 double normalDistanceToPLane(const Particle& p);
-		 void MetsPlaneAt(const Particle& Par,Positions& pos);
+		 void MeetsPlaneAt(const Particle& Par,Positions& pos);
 		 void PropagateToPlane(Particle& par);
 		 void ShiftPositionNormalToPlane(Positions& pos,double distnace);
 		 void makeHyperPlane(const Positions& pos1,const Positions& pos2, const Positions& pos3);
@@ -93,20 +89,20 @@ namespace mcEUTEL{
 		}FrontPlane, BackPlane;
 
 
-		struct BondaryLine{
+		struct BoundaryLine{
 			double A,B,C;// A*x +B*y+C=0
 		    	
 			bool isInsideBoundary(const Positions& pos);
 			bool isInsideBoundary(const Particle& par);
 			double normalDistanceToLine(const Particle& p);// z coordinate gets ignored
-			BondaryLine(const Positions &p1,const Positions&p2);
-			BondaryLine():A(0),B(0),C(0){}
+			BoundaryLine(const Positions &p1,const Positions&p2);
+			BoundaryLine():A(0),B(0),C(0){}
 		};
 		
 		//Positions p1_,p2_,p3_,p4_;
 		std::vector<Positions> positions_;
-		std::vector<BondaryLine> Bondary_;
-		BondaryLine yZeroLine,xZeroLine;
+		std::vector<BoundaryLine> Boundary_;
+		BoundaryLine yZeroLine,xZeroLine;
 		bool Vec_isInsideBoundaries(const Particle& par);
 		double radiationLength_,thickness;
 		double pixelSizeX_,pixelSizeY_; /*!< the size of the Pixel in mm*/

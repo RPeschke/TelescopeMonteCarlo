@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <ConfigurationFile>
-
-<Planes>
-  <plane nr="1" Type="TelescopePlane">
+<PredefinedPlanes>
+  <Plane name="myFancyDefaultTelescopePlane">
     <pixel>
      <position nr="1">
         <x pos="0"/>
@@ -29,232 +28,59 @@
       <position nr="3">
         <x pos="20"/>
         <y pos="20"/>
-        <z pos="10"/>
+        <z pos="0"/>
       </position>
       <position nr="4">
         <x pos="0"/>
         <y pos="20"/>
-        <z pos="10"/>
+        <z pos="0"/>
       </position>
     </ActiveArea>
     <Thickness value="0.05"/>
   <radiationLength value="93.6"/>
   <PixelSize x="0.045" y="0.045"/>
+  </Plane>
+    
+</PredefinedPlanes>
+<Planes>
+  <plane nr="1" Type="TelescopePlane">
+    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+
   </plane>
   <plane nr="2" Type="TelescopePlane">
-    <pixel>
-     <position nr="1">
-        <x pos="0"/>
-        <y pos="-10"/>
-        <z pos="150"/>
-      </position>
-      <position nr="2">
-        <x pos="20"/>
-        <y pos="0"/>
-        <z pos="150"/>
-      </position>
-    </pixel>
-    <ActiveArea>
-      <position nr="1">
-        <x pos="0"/>
-        <y pos="0"/>
-        <z pos="150"/>
-      </position>
-      <position nr="2">
-        <x pos="20"/>
-        <y pos="0"/>
-        <z pos="150"/>
-      </position>
-      <position nr="3">
-        <x pos="20"/>
-        <y pos="20"/>
-        <z pos="150"/>
-      </position>
-      <position nr="4">
-        <x pos="0"/>
-        <y pos="20"/>
-        <z pos="150"/>
-      </position>
-    </ActiveArea>
-  <Thickness value="0.05"/>
-  <radiationLength value="93.6"/>
-  <PixelSize x="0.045" y="0.045"/>
+    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+    <modifyPlane>
+      <rotate axis="z" angle="0.1"/>
+      <move x="0" y="0" z="150"/>
+   </modifyPlane>
   </plane>
   <plane nr="3" Type="TelescopePlane">
-        <pixel>
-     <position nr="1">
-        <x pos="0"/>
-        <y pos="0"/>
-        <z pos="300"/>
-      </position>
-      <position nr="2">
-        <x pos="20"/>
-        <y pos="0"/>
-        <z pos="300"/>
-      </position>
-    </pixel>
-    <ActiveArea>
-      <position nr="1">
-        <x pos="0"/>
-        <y pos="0"/>
-        <z pos="300"/>
-      </position>
-      <position nr="2">
-        <x pos="20"/>
-        <y pos="0"/>
-        <z pos="300"/>
-      </position>
-      <position nr="3">
-        <x pos="20"/>
-        <y pos="20"/>
-        <z pos="300"/>
-      </position>
-      <position nr="4">
-        <x pos="0"/>
-        <y pos="20"/>
-        <z pos="300"/>
-      </position>
-    </ActiveArea>
-        <Thickness value="0.05"/>
-  <radiationLength value="93.6"/>
-  <PixelSize x="0.045" y="0.045"/>
+    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+    <modifyPlane>
+      <rotate axis="z" angle="0.2"/>
+      <move x="0" y="0" z="300"/>
+   </modifyPlane>
   </plane>
   <plane nr="4" Type="TelescopePlane">
-        <pixel>
-     <position nr="1">
-        <x pos="0"/>
-        <y pos="0"/>
-        <z pos="450"/>
-      </position>
-      <position nr="2">
-        <x pos="20"/>
-        <y pos="0"/>
-        <z pos="450"/>
-      </position>
-    </pixel>
-    <ActiveArea>
-      <position nr="1">
-        <x pos="0"/>
-        <y pos="0"/>
-        <z pos="450"/>
-      </position>
-      <position nr="2">
-        <x pos="20"/>
-        <y pos="0"/>
-        <z pos="450"/>
-      </position>
-      <position nr="3">
-        <x pos="20"/>
-        <y pos="20"/>
-        <z pos="450"/>
-      </position>
-      <position nr="4">
-        <x pos="0"/>
-        <y pos="20"/>
-        <z pos="450"/>
-      </position>
-    </ActiveArea>
-        <Thickness value="0.05"/>
-  <radiationLength value="93.6"/>
-  <PixelSize x="0.045" y="0.045"/>
+    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+    <modifyPlane>
+      <rotate axis="z" angle="0.3"/>
+      <move x="0" y="0" z="450"/>
+   </modifyPlane>
   </plane>
   <plane nr="5" Type="TelescopePlane">
-        <pixel>
-     <position nr="1">
-        <x pos="0"/>
-        <y pos="0"/>
-        <z pos="600"/>
-      </position>
-      <position nr="2">
-        <x pos="20"/>
-        <y pos="0"/>
-        <z pos="600"/>
-      </position>
-    </pixel>
-    <ActiveArea>
-      <position nr="1">
-        <x pos="0"/>
-        <y pos="0"/>
-        <z pos="600"/>
-      </position>
-      <position nr="2">
-        <x pos="20"/>
-        <y pos="0"/>
-        <z pos="600"/>
-      </position>
-      <position nr="3">
-        <x pos="20"/>
-        <y pos="20"/>
-        <z pos="600"/>
-      </position>
-      <position nr="4">
-        <x pos="0"/>
-        <y pos="20"/>
-        <z pos="600"/>
-      </position>
-    </ActiveArea>
-        <Thickness value="0.05"/>
-  <radiationLength value="93.6"/>
-  <PixelSize x="0.045" y="0.045"/>
+    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+    <modifyPlane>
+      <rotate axis="z" angle="0.4"/>
+      <move x="0" y="0" z="600"/>
+   </modifyPlane>
   </plane>
   <plane nr="6" Type="TelescopePlane">
-        <pixel>
-     <position nr="1">
-        <x pos="-10"/>
-        <y pos="0"/>
-        <z pos="750"/>
-      </position>
-      <position nr="2">
-        <x pos="20"/>
-        <y pos="0"/>
-        <z pos="750"/>
-      </position>
-    </pixel>
-    <ActiveArea>
-      <position nr="1">
-        <x pos="0"/>
-        <y pos="0"/>
-        <z pos="750"/>
-      </position>
-      <position nr="2">
-        <x pos="20"/>
-        <y pos="0"/>
-        <z pos="750"/>
-      </position>
-      <position nr="3">
-        <x pos="30"/>
-        <y pos="10"/>
-        <z pos="750"/>
-      </position>
-      <position nr="4">
-        <x pos="30"/>
-        <y pos="30"/>
-        <z pos="750"/>
-      </position>
-      <position nr="5">
-        <x pos="20"/>
-        <y pos="40"/>
-        <z pos="750"/>
-      </position>
-      <position nr="6">
-        <x pos="0"/>
-        <y pos="40"/>
-        <z pos="750"/>
-      </position>
-      <position nr="7">
-        <x pos="-10"/>
-        <y pos="30"/>
-        <z pos="750"/>
-      </position> 
-      <position nr="8">
-        <x pos="-10"/>
-        <y pos="10"/>
-        <z pos="750"/>
-      </position>    
-    </ActiveArea>
-        <Thickness value="0.05"/>
-  <radiationLength value="93.6"/>
-  <PixelSize x="0.045" y="0.045"/>
+    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+    <modifyPlane>
+      <rotate axis="z" angle="0.5"/>
+      <move x="0" y="0" z="750"/>
+   </modifyPlane>
   </plane>
 </Planes>
   <Beam>
