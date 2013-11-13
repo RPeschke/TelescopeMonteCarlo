@@ -45,6 +45,9 @@
     <ClCompile Include="..\..\main\src\XMLHelpers.cc">
       <Filter>main\Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\main\src\geometrics.cc">
+      <Filter>main\Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\main\inc\particle_mc.h">
@@ -75,6 +78,9 @@
       <Filter>main\Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\..\main\inc\Positions_mc.h">
+      <Filter>main\Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\inc\geometric.h">
       <Filter>main\Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

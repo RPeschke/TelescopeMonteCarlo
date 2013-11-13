@@ -8,10 +8,12 @@
 #include "rapidxml.hpp"
 #include "Positions_mc.h"
 #include "XMLHelpers.h"
+#include "geometric.h"
+
 
 void higlandFormular(Particle& p,double relRadiationLength );
 void straigthForward(Particle& p,double distance );
-int getPosition(rapidxml::xml_node<> *node,mcEUTEL::Positions & p);
+int getPosition(rapidxml::xml_node<> *node,mcEUTEL::vector3 & p);
 
 
 mcEUTEL::Planes::Planes(rapidxml::xml_node<> *node):hit_x(0),hit_y(0),write2file(true){
@@ -76,7 +78,7 @@ int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 	yZeroLine=BoundaryLine(PixelAxis.at(0),PixelAxis.at(1)); //y is zero at the x-Axis sorry for the notation 
 
 	// create a vector that is orthogonal on the vector PixelAxis.at(0)  ---> PixelAxis.at(1)
-	Positions py2; // the vector from PixelAxis.at(0) to py2 is orthogonal (in 2 dimensions) 
+	vector3 py2; // the vector from PixelAxis.at(0) to py2 is orthogonal (in 2 dimensions) 
 				   // to the vector PixelAxis.at(0)  ---> PixelAxis.at(1)
 	py2.x=PixelAxis.at(1).y-PixelAxis.at(0).y+PixelAxis.at(0).x;
 	py2.y=PixelAxis.at(0).x-PixelAxis.at(1).x+PixelAxis.at(1).y;
@@ -87,7 +89,7 @@ int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 	//////////////////////////////////////////////////////////////////////////
 	// Extracts the Positions for the Boundary lines
 	auto BoundaryPositions=XMLExtractPositions(node->first_node("ActiveArea")->first_node("position"));
-	BoundaryPositions.push_back(Positions(BoundaryPositions.at(0))); // close the circle 
+	BoundaryPositions.push_back(vector3(BoundaryPositions.at(0))); // close the circle 
 	XMLModifyPositions(BoundaryPositions,node->first_node("modifyPlane"));
 	for (int i=1;i<BoundaryPositions.size();++i)
 	{
@@ -111,8 +113,8 @@ int mcEUTEL::Planes::ProcessXMLNode( rapidxml::xml_node<> *node )
 	// shrink pixel size for the projection
 	// since the hyper plane can be tilted against the x,y plane the "Projected Pixel size"  shrinks
 	// 
-	double cosAlpha=(xZeroLine.A*FrontPlane.A+xZeroLine.B*FrontPlane.B)/sqrt(FrontPlane.A*FrontPlane.A + FrontPlane.B*FrontPlane.B+FrontPlane.C*FrontPlane.C);
-	double cosBeta=(yZeroLine.A*FrontPlane.A+yZeroLine.B*FrontPlane.B)/sqrt(FrontPlane.A*FrontPlane.A + FrontPlane.B*FrontPlane.B+FrontPlane.C*FrontPlane.C);
+	double cosAlpha=(xZeroLine.A*FrontPlane.NormVector.x+xZeroLine.B*FrontPlane.NormVector.y)/length(FrontPlane.NormVector);
+	double cosBeta=(yZeroLine.A*FrontPlane.NormVector.x+yZeroLine.B*FrontPlane.NormVector.y)/length(FrontPlane.NormVector);
 	pixelSizeX_*=sqrt(1-cosAlpha*cosAlpha);
 	pixelSizeY_*=sqrt(1-cosBeta*cosBeta);
 
@@ -127,7 +129,7 @@ int mcEUTEL::Planes::fitPlaneBetweenOtherPlanes( const Planes& beforePlane,const
 FrontPlane=beforePlane.BackPlane;
 BackPlane=afterPlane.FrontPlane;
 
-	thickness=FrontPlane.D/FrontPlane.C-BackPlane.D/BackPlane.C;// just a rough estimation.
+	thickness=FrontPlane.D/FrontPlane.NormVector.z-BackPlane.D/BackPlane.NormVector.z;// just a rough estimation.
 
 	return 1;
 }
@@ -210,7 +212,7 @@ mcEUTEL::Planes mcEUTEL::makeAirPlane( const Planes& PreviousPlane,double ZEnd )
 	return makeAirPlane(PreviousPlane.getZEndPos(),ZEnd);
 }
 
-mcEUTEL::Planes::BoundaryLine::BoundaryLine( const Positions &p1,const Positions&p2 )
+mcEUTEL::Planes::BoundaryLine::BoundaryLine( const vector3 &p1,const vector3&p2 )
 {
 
 
@@ -232,7 +234,7 @@ mcEUTEL::Planes::BoundaryLine::BoundaryLine( const Positions &p1,const Positions
 
 }
 
-bool mcEUTEL::Planes::BoundaryLine::isInsideBoundary( const Positions& pos )
+bool mcEUTEL::Planes::BoundaryLine::isInsideBoundary( const vector3& pos )
 {
 /*  defines if A point is "left" or "right" from this line. The orientation of 
 	the line is defined from pos1 to pos2. the line is continued till +- inf.
@@ -272,125 +274,3 @@ double mcEUTEL::Planes::BoundaryLine::normalDistanceToLine( const Particle& p )
 }
 
 
-mcEUTEL::Planes::hyperPlane::hyperPlane( const Positions& pos1,const Positions& pos2,const Positions& pos3 )
-{
-	makeHyperPlane(pos1,pos2,pos3);
-}
-
-void mcEUTEL::Planes::hyperPlane::makeHyperPlane( const Positions& pos1,const Positions& pos2, const Positions& pos3 )
-{
-	double a1=pos2.x-pos1.x;
-	double a2=pos2.y-pos1.y;
-	double a3=pos2.z-pos1.z;
-
-	double b1=pos3.x-pos1.x;
-	double b2=pos3.y-pos1.y;
-	double b3=pos3.z-pos1.z;
-
-
-	A=a2*b3-a3*b2;
-	B=a3*b1-a1*b3;
-	C=a1*b2-a2*b1;
-
-	D=-(A*pos1.x+B*pos1.y+C*pos1.z);
-
-	LengthOfNormVec=sqrt(A*A +B*B+C*C);
-}
-
-double mcEUTEL::Planes::hyperPlane::normalDistanceToPLane( const Particle& p )
-{
-	return (A*p.x+B*p.y+C*p.z+D)/LengthOfNormVec;
-}
-
-void mcEUTEL::Planes::hyperPlane::MeetsPlaneAt( const Particle& Par,Positions& pos )
-{
-	double t=-((A*Par.x+B*Par.y+C*Par.z+D)/(A*tan(Par.phi)+B*tan(Par.theta)+C));
-
-	pos.x=Par.x+t*tan(Par.phi);
-	pos.y=Par.y+t*tan(Par.theta);
-	pos.z=Par.z+t;
-
-}
-
-void mcEUTEL::Planes::hyperPlane::PropagateToPlane( Particle& Par )
-{
-	double t=-((A*Par.x+B*Par.y+C*Par.z+D)/(A*tan(Par.phi)+B*tan(Par.theta)+C));
-
-	Par.x=Par.x+t*tan(Par.phi);
-	Par.y=Par.y+t*tan(Par.theta);
-	Par.z=Par.z+t;
-}
-
-void mcEUTEL::Planes::hyperPlane::ShiftPositionNormalToPlane( Positions& pos,double distnace )
-{
-	pos.x+=A*distnace/LengthOfNormVec;
-	pos.y+=B*distnace/LengthOfNormVec;
-	pos.z+=C*distnace/LengthOfNormVec;
-}
-
-
-void mcEUTEL::Planes::hyperPlane::fitHyperPlane( std::vector<Positions>& pos )
-{
-	// making this fit with least square estimator is in principle just solving a linear equation system:
-	// chi^2= sum (z_i - A*x_i -B*y_i-D)^2
-	// I: d chi^2/dA= sum (x_i* (z_i - A*x_i -B*y_i-D))=0
-	// II: d chi^2/dB= sum (y_i* (z_i - A*x_i -B*y_i-D))=0
-	// III: d chi^2/dD= sum (z_i - A*x_i -B*y_i-D)=0
-	// rewritten to 
-	// I: 0=sumXZ - A*sumXX - B*sumXY -D*sumX
-	// II: 0=sumYZ - A*sumXY - B * sumYY -D*sumY
-	// III: 0=sumZ- A*sumX - B* sumY - D*N
-	// with N number of entries
-
-	
-	double sumXZ=0,sumXX=0,sumXY=0,sumX=0,sumYZ=0,sumYY=0,sumY=0,sumZ=0,N=pos.size();
-
-
-	for (auto p:pos)
-	{
-		sumXZ+=p.x*p.z;
-		sumXY+=p.x*p.y;
-		sumXX+=p.x*p.x;
-		sumX+=p.x;
-		sumYZ+=p.y*p.z;
-		sumYY+=p.y*p.y;
-		sumY+=p.y;
-		sumZ+=p.z;
-
-	}
-
-	auto det =[](double a11,double a12,double a13, 
-		         double a21,double a22,double a23,
-				 double a31,double a32,double a33) -> double 
-	{return (a11*a22*a33+ a13*a21*a32+a12*a23*a31)-(a31*a22*a13+a21*a12*a33+a11*a23*a32);};
-
-	double denominator=det(sumXX,sumXY,sumX,
-		                   sumXY,sumYY,sumY,
-						   sumX,sumY,N);
-
-	if (denominator==0)
-	{
-		// don't divide by zero
-		std::cout<<"could note make hyperplane \n";
-		return;
-
-	}
-	double ANumerator =det(sumXZ,sumXY,sumX,
-		                   sumYZ,sumYY,sumY,
-						   sumZ,sumY  ,N     );
-
-	double BNumerator =det(sumXX,sumXZ,sumX,
-		                   sumXY,sumYZ,sumY,
-						   sumX,sumZ  ,N     );
-
-
-	double DNumerator =det(sumXX,sumXY,sumXZ,
-		                   sumXY,sumYY,sumYZ,
-						   sumX,sumY  ,sumZ    );
-
-	A=-ANumerator/denominator;
-	B=-BNumerator/denominator;
-	C=1;
-	D=-DNumerator/denominator;
-	LengthOfNormVec=sqrt(A*A +B*B+C*C);
-}

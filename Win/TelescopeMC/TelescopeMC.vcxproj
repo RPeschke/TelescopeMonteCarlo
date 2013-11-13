@@ -233,6 +233,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\main\src\geometrics.cc" />
     <ClCompile Include="..\..\main\src\main_mc.cc" />
     <ClCompile Include="..\..\main\src\particle_mc.cc" />
     <ClCompile Include="..\..\main\src\Planes_mc.cc" />
@@ -245,6 +246,7 @@
     <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml_iterators.hpp" />
     <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml_print.hpp" />
     <ClInclude Include="..\..\extern\rapidxml-1.13\rapidxml_utils.hpp" />
+    <ClInclude Include="..\..\main\inc\geometric.h" />
     <ClInclude Include="..\..\main\inc\particle_mc.h" />
     <ClInclude Include="..\..\main\inc\Planes_mc.h" />
     <ClInclude Include="..\..\main\inc\Positions_mc.h" />

@@ -6,7 +6,7 @@
 #include "rapidxml_print.hpp"
 
 
-void XMLModifyPositions(std::vector<mcEUTEL::Positions>& pos,rapidxml::xml_node<> *modifyPlaneGroup ){
+void XMLModifyPositions(std::vector<mcEUTEL::vector3>& pos,rapidxml::xml_node<> *modifyPlaneGroup ){
 
 	if (modifyPlaneGroup)
 	{
@@ -27,7 +27,7 @@ void XMLModifyPositions(std::vector<mcEUTEL::Positions>& pos,rapidxml::xml_node<
 	}
 }
 
-int XMLRotateAroundAxis(std::vector<mcEUTEL::Positions>& pos,rapidxml::xml_node<> *node ){
+int XMLRotateAroundAxis(std::vector<mcEUTEL::vector3>& pos,rapidxml::xml_node<> *node ){
 	if(strcmp(node->name(),"rotate")) return -1; // to make sure that the correct node is used
 
 	auto axis=node->first_attribute("axis")->value();
@@ -58,7 +58,7 @@ int XMLRotateAroundAxis(std::vector<mcEUTEL::Positions>& pos,rapidxml::xml_node<
 }
 
 
-int XMLMovePositions(std::vector<mcEUTEL::Positions>& pos,rapidxml::xml_node<> *node ){
+int XMLMovePositions(std::vector<mcEUTEL::vector3>& pos,rapidxml::xml_node<> *node ){
 	if(strcmp(node->name(),"move")) return -1; // to make sure that the correct node is used
 
 	double moveX=std::atof(node->first_attribute("x")->value());
@@ -75,10 +75,10 @@ int XMLMovePositions(std::vector<mcEUTEL::Positions>& pos,rapidxml::xml_node<> *
 	return 1;
 }
 
-std::vector<mcEUTEL::Positions> XMLExtractPositions( rapidxml::xml_node<> *position ){
+std::vector<mcEUTEL::vector3> XMLExtractPositions( rapidxml::xml_node<> *position ){
 
-	std::vector<mcEUTEL::Positions> ReturnValue;
-	mcEUTEL::Positions p;
+	std::vector<mcEUTEL::vector3> ReturnValue;
+	mcEUTEL::vector3 p;
 	// 	auto position= node->first_node("ActiveArea")->first_node("position");
 	// 	getPosition(position,oldP);
 
@@ -88,12 +88,12 @@ std::vector<mcEUTEL::Positions> XMLExtractPositions( rapidxml::xml_node<> *posit
 
 
 		getPosition(position,p);
-		ReturnValue.push_back(mcEUTEL::Positions(p));
+		ReturnValue.push_back(mcEUTEL::vector3(p));
 	}
 	return ReturnValue;
 }
 
-int getPosition(rapidxml::xml_node<> *node,mcEUTEL::Positions & p){
+int getPosition(rapidxml::xml_node<> *node,mcEUTEL::vector3 & p){
 	if(strcmp(node->name(),"position")) return -1; // to make sure that the correct node is used
 
 

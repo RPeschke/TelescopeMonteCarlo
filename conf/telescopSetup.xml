@@ -138,5 +138,6 @@
     <beamCenterY>5</beamCenterY>  <!-- Distance from (0,0) in mm -->
     <beamSize>10</beamSize> <!-- Gaussian shape Beam size in mm -->
   </Beam>
+  <BField x="0" y="0" z="0"/>
 </ConfigurationFile>
 

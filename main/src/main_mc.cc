@@ -2,6 +2,7 @@
 #include "TelescopeSetup_mc.h"
 #include <string>
 #include <time.h>
+#include "geometric.h"
 using namespace std;
 
 
@@ -14,6 +15,28 @@ int main(int argc, char *argv[]){
 		return -1;
 
 	}
+
+
+
+ std::vector<mcEUTEL::vector3> p;
+
+ p.push_back(mcEUTEL::vector3(0,0,0));
+ p.push_back(mcEUTEL::vector3(0,1,0));
+ p.push_back(mcEUTEL::vector3(0,0,1));
+
+  mcGeometric::hyperPlane particlePlane(mcEUTEL::vector3(0,0,1),mcEUTEL::vector3(1,0,0),mcEUTEL::vector3(0,0,0));
+  mcGeometric::hyperPlane telescopePlane(mcEUTEL::vector3(1,0,1),mcEUTEL::vector3(0,1,1),mcEUTEL::vector3(0,0,1));
+
+  mcGeometric::line l;
+
+  mcGeometric::intersectionPlanePlane(particlePlane,telescopePlane,l);
+
+  mcGeometric::Sphere s(5,mcEUTEL::vector3(-5,0,0));
+  mcEUTEL::vector3 p1;
+  intersectionLineSphere(l,s,p1);
+  Particle par;
+  intersectionPlanePlaneSphere(particlePlane,telescopePlane,s,par);
+
 
 	 clock_t start, finish;
 	  double  duration;

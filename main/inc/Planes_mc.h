@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include "Positions_mc.h"
+#include "geometric.h"
+
 
 
 /*! this Class should contain all informations about DUT and Telescopes
@@ -15,6 +17,7 @@
 	but for now the information needs to be hard coded
 
 */
+
 class Particle;
 
 namespace mcEUTEL{
@@ -44,7 +47,7 @@ namespace mcEUTEL{
 		void setRadiationLength(double radiationLength){
 			radiationLength_=radiationLength;
 		}
-		bool setPosition(const int coordinate,const Positions &p){};
+		bool setPosition(const int coordinate,const vector3 &p){};
 			/**
 			* @param orientation where 1 means x direction and 2 means y direction.
 			* @param PixelSize is the pixel size of the device in this direction 
@@ -68,7 +71,7 @@ namespace mcEUTEL{
 			*/
 			void getHit(const Particle& p);;
 			
-			double getZEndPos() const{return -(FrontPlane.D/FrontPlane.C);};// positionat x=0 y=0
+			double getZEndPos() const{return -(FrontPlane.D/FrontPlane.NormVector.z);};// positionat x=0 y=0
 			std::string name_;
 			bool write2file;
 			int hit_x,hit_y;
@@ -76,31 +79,21 @@ namespace mcEUTEL{
 	private:
 
 
-		struct hyperPlane{
-			double A,B,C,D,LengthOfNormVec; // A*x + B*y + C*z +D =0
-		 double normalDistanceToPLane(const Particle& p);
-		 void MeetsPlaneAt(const Particle& Par,Positions& pos);
-		 void PropagateToPlane(Particle& par);
-		 void ShiftPositionNormalToPlane(Positions& pos,double distnace);
-		 void makeHyperPlane(const Positions& pos1,const Positions& pos2, const Positions& pos3);
-		 void fitHyperPlane(std::vector<Positions>& pos);
-		 hyperPlane(const Positions& pos1,const Positions& pos2,const Positions& pos3);
-		 hyperPlane():A(0),B(0),C(0),D(0),LengthOfNormVec(0){}
-		}FrontPlane, BackPlane;
+		mcGeometric::hyperPlane FrontPlane, BackPlane;
 
 
 		struct BoundaryLine{
 			double A,B,C;// A*x +B*y+C=0
 		    	
-			bool isInsideBoundary(const Positions& pos);
+			bool isInsideBoundary(const vector3& pos);
 			bool isInsideBoundary(const Particle& par);
 			double normalDistanceToLine(const Particle& p);// z coordinate gets ignored
-			BoundaryLine(const Positions &p1,const Positions&p2);
+			BoundaryLine(const vector3 &p1,const vector3&p2);
 			BoundaryLine():A(0),B(0),C(0){}
 		};
 		
 		//Positions p1_,p2_,p3_,p4_;
-		std::vector<Positions> positions_;
+		std::vector<vector3> positions_;
 		std::vector<BoundaryLine> Boundary_;
 		BoundaryLine yZeroLine,xZeroLine;
 		bool Vec_isInsideBoundaries(const Particle& par);

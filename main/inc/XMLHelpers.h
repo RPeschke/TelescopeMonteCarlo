@@ -6,11 +6,11 @@
 
 
 
-void XMLModifyPositions(std::vector<mcEUTEL::Positions>& pos,rapidxml::xml_node<> *node );
-int XMLRotateAroundAxis(std::vector<mcEUTEL::Positions>& pos,rapidxml::xml_node<> *node );
-int XMLMovePositions(std::vector<mcEUTEL::Positions>& pos,rapidxml::xml_node<> *node );
-std::vector<mcEUTEL::Positions> XMLExtractPositions( rapidxml::xml_node<> *position );
-int getPosition(rapidxml::xml_node<> *node,mcEUTEL::Positions & p);
+void XMLModifyPositions(std::vector<mcEUTEL::vector3>& pos,rapidxml::xml_node<> *node );
+int XMLRotateAroundAxis(std::vector<mcEUTEL::vector3>& pos,rapidxml::xml_node<> *node );
+int XMLMovePositions(std::vector<mcEUTEL::vector3>& pos,rapidxml::xml_node<> *node );
+std::vector<mcEUTEL::vector3> XMLExtractPositions( rapidxml::xml_node<> *position );
+int getPosition(rapidxml::xml_node<> *node,mcEUTEL::vector3 & p);
 
 void XMLPreparser( rapidxml::xml_document<>& doc );
 rapidxml::xml_node<> *XMLFindPredefinedPlane(rapidxml::xml_node<> *node,const char* name);
