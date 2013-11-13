@@ -44,39 +44,39 @@
 </PredefinedPlanes>
 <Planes>
   <plane nr="1" Type="TelescopePlane">
-    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+    <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
 
   </plane>
   <plane nr="2" Type="TelescopePlane">
-    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+    <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
       <rotate axis="z" angle="0.1"/>
       <move x="0" y="0" z="150"/>
    </modifyPlane>
   </plane>
   <plane nr="3" Type="TelescopePlane">
-    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+    <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
       <rotate axis="z" angle="0.2"/>
       <move x="0" y="0" z="300"/>
    </modifyPlane>
   </plane>
   <plane nr="4" Type="TelescopePlane">
-    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+    <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
       <rotate axis="z" angle="0.3"/>
       <move x="0" y="0" z="450"/>
    </modifyPlane>
   </plane>
   <plane nr="5" Type="TelescopePlane">
-    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+    <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
       <rotate axis="z" angle="0.4"/>
       <move x="0" y="0" z="600"/>
    </modifyPlane>
   </plane>
   <plane nr="6" Type="TelescopePlane">
-    <usePredifinedPlane name="myFancyDefaultTelescopePlane"/>
+    <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
       <rotate axis="z" angle="0.5"/>
       <move x="0" y="0" z="750"/>

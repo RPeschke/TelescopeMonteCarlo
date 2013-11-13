@@ -113,9 +113,9 @@ for (auto plane = doc.first_node("ConfigurationFile")->first_node("Planes")->fir
 	 plane;
 	 plane=plane->next_sibling()){
 	
-	if (plane->first_node("usePredifinedPlane"))
+	if (plane->first_node("usePredefinedPlane"))
 	{
-		auto use=plane->first_node("usePredifinedPlane")->first_attribute("name")->value();
+		auto use=plane->first_node("usePredefinedPlane")->first_attribute("name")->value();
 	//std::cout << use<<std::endl;
 
 	auto correspondingPredefinedPlane=XMLFindPredefinedPlane(predef,use);
