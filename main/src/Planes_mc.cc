@@ -41,8 +41,8 @@ void mcEUTEL::Planes::getHit( const Particle& p )
 	if (Vec_isInsideBoundaries(p))
 	{
 
-		hit_y=static_cast<int>(yZeroLine.normalDistanceToLine(p)/pixelSizeY_);
-		hit_x=static_cast<int>(xZeroLine.normalDistanceToLine(p)/pixelSizeX_);
+		hit_y=static_cast<int>(yZeroLine.normalDistanceToLine(p)/pixelSizeY_+1);
+		hit_x=static_cast<int>(xZeroLine.normalDistanceToLine(p)/pixelSizeX_+1);
 
 
 	}else				{
@@ -218,7 +218,7 @@ mcEUTEL::Planes::BoundaryLine::BoundaryLine( const Positions &p1,const Positions
 
 	A=(p2.y-p1.y);
 	B=(p1.x-p2.x);
-	assert(B*p1.y+A*p1.x==B*p2.y+A*p2.x);
+	//assert(B*p1.y+A*p1.x-(B*p2.y+A*p2.x)<0.01); // true besides some rounding issues
 	auto n=sqrt(A*A+B*B);
 	B/=n;
 	A/=n;

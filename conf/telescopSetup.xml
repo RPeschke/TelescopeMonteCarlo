@@ -40,7 +40,46 @@
   <radiationLength value="93.6"/>
   <PixelSize x="0.045" y="0.045"/>
   </Plane>
-    
+  <Plane name="SCT">
+    <pixel>
+     <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="0"/>
+      </position>
+      <position nr="2">
+        <x pos="20"/>
+        <y pos="0"/>
+        <z pos="0"/>
+      </position>
+    </pixel>
+    <ActiveArea>
+      <position nr="1">
+        <x pos="0"/>
+        <y pos="0"/>
+        <z pos="0"/>
+      </position>
+      <position nr="2">
+        <x pos="100"/>
+        <y pos="0"/>
+        <z pos="0"/>
+      </position>
+      <position nr="3">
+        <x pos="100"/>
+        <y pos="100"/>
+        <z pos="0"/>
+      </position>
+      <position nr="4">
+        <x pos="0"/>
+        <y pos="100"/>
+        <z pos="0"/>
+      </position>
+    </ActiveArea>
+    <Thickness value="0.05"/>
+  <radiationLength value="93.6"/>
+  <PixelSize x="0.078" y="25"/>
+  </Plane>   
+
 </PredefinedPlanes>
 <Planes>
   <plane nr="1" Type="TelescopePlane">
@@ -61,6 +100,12 @@
       <move x="0" y="0" z="300"/>
    </modifyPlane>
   </plane>
+  <plane Type="DUT">
+    <usePredefinedPlane name="SCT"/>
+    <modifyPlane>
+      <move x="0" y="0" z="350"/>
+   </modifyPlane>
+  </plane>
   <plane nr="4" Type="TelescopePlane">
     <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
@@ -78,7 +123,7 @@
   <plane nr="6" Type="TelescopePlane">
     <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
-      <rotate axis="z" angle="0.5"/>
+      <rotate axis="x" angle="1"/>
       <move x="0" y="0" z="750"/>
    </modifyPlane>
   </plane>
@@ -91,7 +136,7 @@
     <beamEnergySpread>0.5</beamEnergySpread><!-- Gaussian shape Energy spread in GeV -->
     <beamCenterX>10</beamCenterX>  <!-- Distance from (0,0) in mm -->
     <beamCenterY>5</beamCenterY>  <!-- Distance from (0,0) in mm -->
-    <beamSize>20</beamSize> <!-- Gaussian shape Beam size in mm -->
+    <beamSize>10</beamSize> <!-- Gaussian shape Beam size in mm -->
   </Beam>
 </ConfigurationFile>
 

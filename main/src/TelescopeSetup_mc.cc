@@ -19,7 +19,7 @@ using namespace rapidxml;
 
 class TelescopeSetup::PImpl{
 public:
-	PImpl():froot(nullptr),tree(nullptr),plane_id(0),true_x(0),true_y(0),hit_x(0),hit_y(0),randomNr(0),Configured(0),SaveFileSet(0){}
+	PImpl():froot(nullptr),tree(nullptr),plane_id(0),hit_x(0),hit_y(0),Configured(0),SaveFileSet(0){}
 	~PImpl(){
 
 		if (froot!=nullptr)
@@ -59,11 +59,9 @@ public:
 				{
 					p.getHit(t);
 					//	Disp(t);
-					true_x=t.x;
-					true_y=t.y;
 					hit_x=p.hit_x;
 					hit_y=p.hit_y;
-					randomNr=getNormRandom();
+					
 					tree->Fill();
 					++plane_id;
 				}
@@ -85,11 +83,12 @@ public:
 		froot=new TFile(fileName,"recreate");
 		tree=new TTree("tree","a simple tree");
 		tree->Branch("plane_id",&plane_id,"plane_id/I");
-		tree->Branch("true_x",&true_x,"true_x/D");
-		tree->Branch("true_y",&true_y,"true_y/D");
+		tree->Branch("true_x",&t.x,"true_x/D");
+		tree->Branch("true_y",&t.y,"true_y/D");
+		tree->Branch("true_z",&t.z,"true_z/D");
 		tree->Branch("hit_x",&hit_x,"hit_x/I");
 		tree->Branch("hit_y",&hit_y,"hit_y/I");
-		tree->Branch("rand",&randomNr,"rand/D");
+		
 		SaveFileSet=true;
 	}
 	void loadXMLConfiguration(const char* FileName){
@@ -127,9 +126,8 @@ private:
 	TFile *froot;
 	TTree *tree;
 	int plane_id;
-	double true_x,true_y;
 	int hit_x,hit_y;
-	double randomNr;
+	
 	Particle t;
 	bool Configured,SaveFileSet;
 };
