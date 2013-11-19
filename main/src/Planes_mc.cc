@@ -16,7 +16,7 @@ void straigthForward(Particle& p,double distance );
 int getPosition(rapidxml::xml_node<> *node,mcEUTEL::vector3 & p);
 
 
-mcEUTEL::Planes::Planes(rapidxml::xml_node<> *node):hit_x(0),hit_y(0),write2file(true){
+mcEUTEL::Planes::Planes(rapidxml::xml_node<> *node):hit_x(0),hit_y(0),write2file(true),inBFiel(false){
 	ProcessXMLNode(node);
 }
 
@@ -35,7 +35,18 @@ bool mcEUTEL::Planes::setPixelSize( const int oriantaion,const double PixelSize 
 void mcEUTEL::Planes::propagate( Particle& p )
 {
 	higlandFormular(p,thickness/radiationLength_);
-	BackPlane.PropagateToPlane(p);
+	if (inBFiel)
+	{
+		//intersectionHelixPlaneApprox(p.helix_,*this,p.position_)
+		trajectory_.MakeNewHelix(p,BField);
+		double lambda=0;
+		intersectionHelixPlaneApproxNowton(trajectory_,BackPlane,lambda);
+		p.position_=trajectory_.getPosition(lambda);
+		p.directions_=trajectory_.getDirection(lambda);
+
+	}else {
+		BackPlane.PropagateToPlane(p);
+	}
 }
 
 void mcEUTEL::Planes::getHit( const Particle& p )
@@ -153,11 +164,15 @@ bool mcEUTEL::Planes::Vec_isInsideBoundaries( const Particle& par )
 void higlandFormular(Particle& p,double relRadiationLength ){
 
 
-	double sigmaHl=0.0136/p.energy_*sqrt(relRadiationLength)*(1+0.038*log(relRadiationLength));
+	double sigmaHl=0.0136/p.particleEnergy_*sqrt(relRadiationLength)*(1+0.038*log(relRadiationLength));
 	if (sigmaHl>0)
 	{
-		p.phi+=getNormRandom()*sigmaHl;
-		p.theta+=getNormRandom()*sigmaHl;
+		p.directions_.x=p.directions_.z*atan(tan(p.directions_.x/p.directions_.z)+getNormRandom()*sigmaHl);
+		p.directions_.y=p.directions_.z*atan(tan(p.directions_.y/p.directions_.z)+getNormRandom()*sigmaHl);
+			
+			
+			//p.phi+=getNormRandom()*sigmaHl;
+		//p.theta+=getNormRandom()*sigmaHl;
 
 	}
 	
@@ -166,15 +181,16 @@ void higlandFormular(Particle& p,double relRadiationLength ){
 
 void straigthForward( Particle& p,double distance )
 {
-	p.x+=distance*tan(p.phi);
-	p.y+=distance*tan(p.theta);
-	p.z+=distance;
+	distance=distance/p.directions_.z;
+	p.position_.x+=distance*p.directions_.x;
+	p.position_.y+=distance*p.directions_.y;
+	p.position_.z+=distance*p.directions_.z;
 }
 
 
 void mcEUTEL::Disp( const Particle& p )
 {
-	std::cout<<"p.x: "<<p.x <<"  p.y: "<<p.y<< " p.z: "<< p.z<<std::endl;
+	std::cout<<"p.x: "<<p.position_.x <<"  p.y: "<<p.position_.y<< " p.z: "<< p.position_.z<<std::endl;
 
 }
 
@@ -202,7 +218,7 @@ mcEUTEL::Planes mcEUTEL::makeAirPlane( double zStart,double ZEnd )
 	Planes p; // dummy plane without position information needs to be implemented afterwards
 	p.setPixelSize(1,0.045);
 	p.setPixelSize(2,0.045);
-	p.setRadiationLength(304000);//Air. 304 m
+	p.setRadiationLength(304);//Air. 304 m
 	p.write2file=false;
 	p.name_="air";
 	return p;
@@ -265,12 +281,12 @@ bool mcEUTEL::Planes::BoundaryLine::isInsideBoundary( const vector3& pos )
 
 bool mcEUTEL::Planes::BoundaryLine::isInsideBoundary( const Particle& par )
 {
-return B*par.y+A*par.x +C<=0;
+return B*par.position_.y+A*par.position_.x +C<=0;
 }
 
 double mcEUTEL::Planes::BoundaryLine::normalDistanceToLine( const Particle& p )
 {
-	return -(A*p.x+B*p.y+C);
+	return -(A*p.position_.x+B*p.position_.y+C);
 }
 
 

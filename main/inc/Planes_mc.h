@@ -75,7 +75,9 @@ namespace mcEUTEL{
 			std::string name_;
 			bool write2file;
 			int hit_x,hit_y;
-
+			vector3 BField;
+			bool inBFiel;
+			mcGeometric::helix trajectory_;
 	private:
 
 
@@ -98,7 +100,7 @@ namespace mcEUTEL{
 		BoundaryLine yZeroLine,xZeroLine;
 		bool Vec_isInsideBoundaries(const Particle& par);
 		double radiationLength_,thickness;
-		double pixelSizeX_,pixelSizeY_; /*!< the size of the Pixel in mm*/
+		double pixelSizeX_,pixelSizeY_; /*!< the size of the Pixel in m*/
 		
 	};
 

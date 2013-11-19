@@ -5,6 +5,8 @@
 #include "Positions_mc.h"
 #include "particle_mc.h"
 
+
+class TF1;
 namespace mcGeometric{
 
 struct hyperPlane{
@@ -41,11 +43,34 @@ public:
 
 };
 
+class helix{
+public:
+	mcEUTEL::vector3 startCenter_,
+						parallel_,// is parallel to the magnetic field
+						tangential_,
+						normal_;
+	double angleVelocity_,radius_;
+	mcEUTEL::vector3 getPosition(double lambda) const;
+	mcEUTEL::vector3 getDirection(double lambda) const;
+	helix(const mcEUTEL::vector3& StartPoint,const mcEUTEL::vector3& direction,const mcEUTEL::vector3& Bfiel, const double& energy);
+	helix(const Particle& p, const mcEUTEL::vector3& Bfield);
+	helix();
+	void MakeNewHelix(const Particle& p, const mcEUTEL::vector3& Bfield);
+
+
+};
 int intersectionPlanePlane(const hyperPlane& plane1, const hyperPlane& plane2, line& intersectionLine);
 
 int intersectionPlanePlaneSphere(const hyperPlane& particlePlane, const hyperPlane& TelescopePlane, const Sphere& sphere, Particle& p);
 
 int intersectionLineSphere(const line& l,const Sphere& sphere,mcEUTEL::vector3& p);
+
+int intersectionHelixPlaneApproxNumeric(const helix& h,const hyperPlane& plane,mcEUTEL::vector3& p);
+//int intersectionHelixPlaneApprox(const helix& h,const hyperPlane& plane,mcEUTEL::vector3& p);
+double intersectionHelixPlaneApprox( const helix& h,const hyperPlane& plane);
+int intersectionHelixPlaneApproxNowton(const helix& h,const hyperPlane& plane,double& lambda);
+
 }
+
 
 #endif // geometric_h__

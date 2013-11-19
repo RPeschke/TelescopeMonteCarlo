@@ -1,9 +1,18 @@
 
 #include <vector>
 #include "geometric.h"
-
+#include "TF1.h"
 #include <iostream>
 using namespace mcEUTEL;
+
+
+#define SPEED_OF_LIGHT (299792458)
+#define GeV (1e9)
+#define keV (1e3)
+#define MeV (1e6)
+#define electronMass (511*keV)
+#define PI 3.14
+
 
 mcGeometric::hyperPlane::hyperPlane( const vector3& pos1,const vector3& pos2,const vector3& pos3 )
 {
@@ -37,26 +46,25 @@ void mcGeometric::hyperPlane::makeHyperPlane( const vector3& pos1,const vector3&
 double mcGeometric::hyperPlane::normalDistanceToPLane( const Particle& p )
 {
 	
-	return (NormVector.x*p.x+NormVector.y*p.y+NormVector.z*p.z+D)/LengthOfNormVec;
+	return (NormVector.x*p.position_.x+NormVector.y*p.position_.y+NormVector.z*p.position_.z+D)/LengthOfNormVec;
 }
 
 void mcGeometric::hyperPlane::MeetsPlaneAt( const Particle& Par,vector3& pos )
 {
-	double t=-((NormVector.x*Par.x+NormVector.y*Par.y+NormVector.z*Par.z+D)/(NormVector.x*tan(Par.phi)+NormVector.y*tan(Par.theta)+NormVector.z));
+	double t=-((NormVector*Par.position_)+D)/(NormVector*Par.directions_);
 
-	pos.x=Par.x+t*tan(Par.phi);
-	pos.y=Par.y+t*tan(Par.theta);
-	pos.z=Par.z+t;
+	pos.x=Par.position_.x+t*Par.directions_.x;//tan(Par.phi);
+	pos.y=Par.position_.y+t*Par.directions_.y;//*tan(Par.theta);
+	pos.z=Par.position_.z+t*Par.directions_.z;//*1;
 
 }
 
 void mcGeometric::hyperPlane::PropagateToPlane( Particle& Par )
 {
-	double t=-((NormVector.x*Par.x+NormVector.y*Par.y+NormVector.z*Par.z+D)/(NormVector.x*tan(Par.phi)+NormVector.y*tan(Par.theta)+NormVector.z));
-
-	Par.x=Par.x+t*tan(Par.phi);
-	Par.y=Par.y+t*tan(Par.theta);
-	Par.z=Par.z+t;
+	double t=-((NormVector*Par.position_)+D)/(NormVector*Par.directions_);
+	Par.position_.x+=t*Par.directions_.x;
+	Par.position_.y+=t*Par.directions_.y;
+	Par.position_.z+=t*Par.directions_.z;
 }
 
 void mcGeometric::hyperPlane::ShiftPositionNormalToPlane( vector3& pos,double distnace )
@@ -152,12 +160,11 @@ mcEUTEL::vector3 r=p1-sphere.Center_;
 mcEUTEL::vector3 direction;
 direction=crossProduct(r,particlePlane.NormVector);
 
-p.x=p1.x;
-p.y=p1.y;
-p.z=p1.z;
+p.position_=p1;
 
-p.phi=tan(p1.x/p1.z);
-p.theta=tan(p1.y/p1.z);
+
+// p.phi=tan(p1.x/p1.z);  // is wrong but the function will be removed in total
+// p.theta=tan(p1.y/p1.z);
 
 
 return 0;
@@ -247,6 +254,127 @@ int mcGeometric::intersectionLineSphere( const line& l,const Sphere& sphere,mcEU
 		return 0;
 }
 
+double mcGeometric::intersectionHelixPlaneApprox( const helix& h,const hyperPlane& plane)
+{
+	// o= a* lambda^2 + p* lambda +q
+
+	double a=-h.radius_*(plane.NormVector*h.normal_)*h.angleVelocity_;
+	double p=plane.NormVector*h.parallel_
+		      +h.radius_*h.angleVelocity_*(h.tangential_*plane.NormVector);
+	
+	double q=h.startCenter_*plane.NormVector
+		     +h.radius_*plane.NormVector*h.normal_
+			 +plane.D;
+
+	if (abs(a/p)<1e-3) // it seems to be numerically unstable to divide if a is much smaller than q. 
+		             // and if a is small compared to q than it is almost a straight line.
+				    // and since this is only the starting point for the newton approximation
+				    //it is ok to make this approximation
+	{
+		a=0;
+	}
+	if (a==0)
+	{
+		double lamda1=-q/p;
+		
+		return lamda1;
+	}else{
+		p/=a;
+		q/=a;
+		double lamda1=-p/2+sqrt((p/2)*(p/2)-q);
+
+
+		double lamda2=-p/2-sqrt((p/2)*(p/2)-q);
+
+		if (lamda1>0&&(lamda1<lamda2||lamda2<0))
+		{
+			intersectionHelixPlaneApproxNowton(h,plane,lamda1);
+			
+			return lamda1;
+		}else if (lamda2>0&&(lamda2<lamda1||lamda1<0))
+		{
+			intersectionHelixPlaneApproxNowton(h,plane,lamda2);
+			
+			return lamda2;
+		}
+
+		
+		
+	}
+
+	
+	return -1;
+
+
+}
+
+int mcGeometric::intersectionHelixPlaneApproxNowton( const helix& h,const hyperPlane& plane,double& lambda )
+{
+	// F(lambda) = A + B*lambda +C*cos(angleVel*lambda) +D*sin(angleVel*lambda);
+	// F'(lambda)= B-C*angleVel*sin(angelVel*lambda) + D*cos(angleVel*Lambda);
+	// lambda_{n+1} = lambda_{n}- F(lambda)/F'(lambda);
+	lambda*=h.angleVelocity_;
+	double A=plane.NormVector*h.startCenter_+plane.D;
+	double B=plane.NormVector*h.parallel_/h.angleVelocity_;
+	double C=h.radius_*(plane.NormVector*h.normal_);
+	double D=h.radius_*(plane.NormVector*h.tangential_);
+	double lambdaOld=-1,deltaLamda=1;
+	int n=0;
+	while(deltaLamda>1e-3&&++n<100)
+	{
+		lambdaOld=lambda;
+		lambda-=(A+B*lambda+C*cos(lambda)+D*sin(lambda))
+			    /(B-C*sin(lambda)+D*cos(lambda));
+		deltaLamda=abs(lambda-lambdaOld);
+
+	}
+		lambda/=h.angleVelocity_;
+	return 0;
+}
+
+int mcGeometric::intersectionHelixPlaneApproxNumeric( const helix& h,const hyperPlane& plane,mcEUTEL::vector3& p )
+{
+		// F(lambda) = A + B*lambda +C*cos(angleVel*lambda) +D*sin(angleVel*lambda);
+
+	double A=plane.NormVector*h.startCenter_+plane.D;
+	double B=plane.NormVector*h.parallel_;
+	double C=h.radius_*(plane.NormVector*h.normal_);
+	double D=h.radius_*(plane.NormVector*h.tangential_);
+
+
+	double parameter[5];
+	parameter[0]=A;
+	parameter[1]=B;
+	parameter[2]=C;
+	parameter[3]=D;
+	parameter[4]=h.angleVelocity_;
+	 TF1 *fa = new TF1("fa","[0] + [1]/[4]*x +[2]*cos(x) +[3]*sin(x)");
+
+
+	 fa->SetParameters(parameter);
+	 fa->SetNpx(100);
+	 auto y=fa->Eval(590.01226738478792190416749513406);
+	 y=fa->Eval(0.78500000000000003);
+	 auto y1=1;
+	 double lambda;
+	 int i=0;
+	 while (y1>1e-4)
+	 {
+		  lambda=fa->GetX(0,i*PI/4,(i+1)*PI/4);
+		  if (lambda<(i+1)*PI/4)
+		  {
+			   y1=fa->Eval(lambda);
+		  }
+		 ++i;
+	 }
+	 lambda/=h.angleVelocity_;
+	 intersectionHelixPlaneApproxNowton(h,plane,lambda);
+	 p=h.getPosition(lambda);
+	
+	 return 0;
+
+}
+
 mcEUTEL::vector3 mcGeometric::line::getPosition( double lambda ) const
 {
 	vector3 ret;
@@ -261,4 +389,69 @@ void mcGeometric::Sphere::newSphere( double radius,const mcEUTEL::vector3& cente
 	Radius_=radius;
 	Center_=center;
 
+}
+
+mcGeometric::helix::helix( const vector3& StartPoint,const vector3& direction,const vector3& Bfield, const double& energy)
+{
+	
+	auto d=direction;
+	d.normalize();
+	d=d*SPEED_OF_LIGHT;
+	 parallel_=(Bfield*d)*Bfield/Bfield.length();
+	 normal_=crossProduct(d,Bfield);
+	 normal_.normalize();
+	 tangential_=crossProduct(normal_,Bfield);
+	 tangential_.normalize();
+
+	 angleVelocity_=Bfield.length()*SPEED_OF_LIGHT*SPEED_OF_LIGHT/electronMass;
+	 
+	 vector3 rad=energy*GeV/SPEED_OF_LIGHT*crossProduct(d,Bfield)/(Bfield.length()*Bfield.length()*d.length());
+	 radius_=rad.length();
+	 startCenter_=StartPoint-rad;
+	 
+	 
+}
+
+mcGeometric::helix::helix( const Particle& p, const mcEUTEL::vector3& Bfield )
+{
+	MakeNewHelix(p,Bfield);
+}
+mcGeometric::helix::helix(): angleVelocity_(0.0),radius_(0.0){}
+
+void mcGeometric::helix::MakeNewHelix( const Particle& p, const mcEUTEL::vector3& Bfield )
+{
+	auto velocity=p.directions_;
+	velocity.normalize();
+	velocity=velocity*SPEED_OF_LIGHT;
+	parallel_=(Bfield*velocity)*Bfield/(Bfield.length()*Bfield.length());
+	normal_=crossProduct(velocity,Bfield)*p.Charge_;
+	normal_.normalize();
+	tangential_=crossProduct(normal_,Bfield);
+	tangential_.normalize();
+	if (tangential_.z<0)
+	{
+		tangential_=(-1)*tangential_;
+	}
+	angleVelocity_=Bfield.length()*SPEED_OF_LIGHT*SPEED_OF_LIGHT/(p.particleEnergy_*GeV);
+
+	vector3 rad=p.particleEnergy_*GeV/SPEED_OF_LIGHT*crossProduct(velocity,Bfield)/(Bfield.length()*Bfield.length()*velocity.length()*p.Charge_);
+	radius_=rad.length();
+	startCenter_=p.position_-rad;
+}
+
+mcEUTEL::vector3 mcGeometric::helix::getPosition( double lambda ) const
+{
+	mcEUTEL::vector3 ret=startCenter_
+						+parallel_*lambda
+						+radius_*normal_*cos(angleVelocity_*lambda)
+						+radius_*tangential_*sin(angleVelocity_*lambda);
+	return ret;
+}
+
+mcEUTEL::vector3 mcGeometric::helix::getDirection( double lambda ) const
+{
+	mcEUTEL::vector3 ret=parallel_
+						-radius_*normal_*sin(angleVelocity_*lambda)*angleVelocity_
+						+radius_*tangential_*cos(angleVelocity_*lambda)*angleVelocity_;
+	return ret;
 }

@@ -3,22 +3,26 @@
 
 #include <string>
 #include "rapidxml.hpp"
+#include "Positions_mc.h"
 
 class Particle{
   private:
     std::string Name_;
     double Mass_;
-    double Charge_;
-    double Energy_;
+    
+    double BeamEnergy_;  // Nomal energy of the beam
     
     double BeamSize_;  //Size of the beam spot
     double BeamSpread_;  //Error on the energy, measured as one sigma of a guassianly distributed energy
     double BeamCentreX_;
     double BeamCentreY_;
   public:
-	  double x,y,z;
-	  double phi,theta;
-	  double energy_; // momentum
+	  double Charge_;
+	  //double x,y,z;
+	  mcEUTEL::vector3 position_,directions_;
+
+	  //double phi,theta;
+	  double particleEnergy_; // momentum
 	  void newParticle(); //this function starts the random generator.
     Particle();
     
@@ -30,7 +34,7 @@ class Particle{
     std::string getName(){return Name_;}
     double getMass(){return Mass_;}
     double getCharge(){return Charge_;}
-    double getEnergy(){return Energy_;}
+    double getEnergy(){return particleEnergy_;}
     double getBeamSize(){return BeamSize_;}
     double getBeamSpread(){return BeamSpread_;}
     double getBeamCentreX(){return BeamCentreX_;}

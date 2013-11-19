@@ -3,6 +3,7 @@
 #include <cmath>
 namespace mcEUTEL{
 
+
 class vector3
 {
 public:
@@ -34,15 +35,45 @@ inline 	void rotateX(double Angle){
 		ret.z=-z;
 		return ret;
 	}
+
+	void normalize(){
+
+		double length1=length();
+		if (length1>0)
+		{
+			x/=length1;
+			y/=length1;
+			z/=length1;
+		}
+	}
+	inline double length() const{
+		return sqrt(x*x+y*y+z*z);
+	}
 };
 inline double operator*(const vector3 &A,const vector3& B){
 	return A.x*B.x+A.y*B.y+A.z*B.z;
 
 }
-
-inline double length(const vector3& p){
-return sqrt(p.x*p.x+p.y*p.y+p.z*p.z);
+inline double length(const vector3& V){
+	return V.length();
 }
+
+inline vector3 operator*(const double &A,const vector3& B){
+	vector3 ret(A*B.x,A*B.y,A*B.z);
+	return ret;
+
+}
+
+inline vector3 operator*(const vector3& B,const double &A){
+	
+	return A*B;
+}
+
+inline vector3 operator/(const vector3& B,const double &A){
+	return B*(1/A);
+}
+
+
 
 
 inline vector3 operator-(const vector3 &A,const vector3& B){

@@ -8,6 +8,7 @@ public:
 	void setSaveFile(const char* fileName);
 	void readXMLConfig(const char* fileName);
 	void Run(int NumberOfEvents);
+	
 	~TelescopeSetup();
 
 private: 

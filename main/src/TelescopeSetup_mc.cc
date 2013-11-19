@@ -12,6 +12,8 @@
 #include <string>
 #include <map>
 #include "XMLHelpers.h"
+#include <TH1D.h>
+#include "TF1.h"
 using namespace std;
 using namespace mcEUTEL;
 using namespace rapidxml;
@@ -28,6 +30,20 @@ public:
 			delete froot;
 		}
 	}
+	void PrintResults(TTree *tree){
+
+		TF1 *g1    = new TF1("g1","gaus");
+		TH1D *h1=new TH1D ("h1","h1",300,0,0.03);
+
+		tree->Draw("true_x>>h1","plane_id=1","");
+		h1->Fit(g1);
+		
+		auto mean=g1->GetParameter(1);// mean
+		auto sigma=g1->GetParameter(2); // sigma
+
+		std::cout<<mean<<std::endl;
+
+	}
 	void run(int NumberOfEvents){
 
 		//check if it is configured or not
@@ -39,10 +55,10 @@ public:
 	
 
 
-		for (int i=1;i<NumberOfEvents;++i)
+		for (int i=0;i<NumberOfEvents;++i)
 		{
 			plane_id=0;
-			t.newParticle();	
+			ParticleBeam.newParticle();	
 			//	Disp(t);
 			if (i%10000==0)
 			{
@@ -57,15 +73,16 @@ public:
 				//Disp(t);
 				if (p.write2file)
 				{
-					p.getHit(t);
+					p.getHit(ParticleBeam);
 					//	Disp(t);
 					hit_x=p.hit_x;
 					hit_y=p.hit_y;
-					
+					phi=tan(ParticleBeam.directions_.x/ParticleBeam.directions_.z);
+					theta=tan(ParticleBeam.directions_.y/ParticleBeam.directions_.z);
 					tree->Fill();
 					++plane_id;
 				}
-				p.propagate(t);
+				p.propagate(ParticleBeam);
 			}
 
 		}	
@@ -83,9 +100,11 @@ public:
 		froot=new TFile(fileName,"recreate");
 		tree=new TTree("tree","a simple tree");
 		tree->Branch("plane_id",&plane_id,"plane_id/I");
-		tree->Branch("true_x",&t.x,"true_x/D");
-		tree->Branch("true_y",&t.y,"true_y/D");
-		tree->Branch("true_z",&t.z,"true_z/D");
+		tree->Branch("true_x",&ParticleBeam.position_.x,"true_x/D");
+		tree->Branch("true_y",&ParticleBeam.position_.y,"true_y/D");
+		tree->Branch("true_z",&ParticleBeam.position_.z,"true_z/D");
+		tree->Branch("phi",&phi,"phi/D");
+		tree->Branch("theta",&theta,"theta/D");
 		tree->Branch("hit_x",&hit_x,"hit_x/I");
 		tree->Branch("hit_y",&hit_y,"hit_y/I");
 		
@@ -115,8 +134,28 @@ public:
 			pl.push_back(Planes(node));
 			pl.at(pl.size()-2).fitPlaneBetweenOtherPlanes(pl.at(pl.size()-3),pl.at(pl.size()-1));
 		}
+		node = doc.first_node("ConfigurationFile")->first_node("BField");
+
+		mcEUTEL::vector3 B;
+
+		B.x=std::atof(node->first_attribute("x")->value());
+		B.y=std::atof(node->first_attribute("y")->value());
+		B.z=std::atof(node->first_attribute("z")->value());
+
+		if (B.length()>0)
+		{
+			for (auto& p:pl)
+			{
+				p.BField=B;
+				p.inBFiel=true;
+			}
+		}
+
+
 		node=doc.first_node("ConfigurationFile")->first_node("Beam");
-		t.ProcessXMLNode(node);
+		ParticleBeam.ProcessXMLNode(node);
+
+
 
 		Configured=true;
 
@@ -127,8 +166,8 @@ private:
 	TTree *tree;
 	int plane_id;
 	int hit_x,hit_y;
-	
-	Particle t;
+	double phi,theta;
+	Particle ParticleBeam;
 	bool Configured,SaveFileSet;
 };
 
@@ -157,3 +196,4 @@ TelescopeSetup::~TelescopeSetup()
 {
 delete privatImpl;
 }
+

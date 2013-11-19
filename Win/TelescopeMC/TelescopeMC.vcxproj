@@ -255,7 +255,9 @@
     <ClInclude Include="..\..\main\inc\XMLHelpers.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\..\conf\telescopSetup.xml" />
+    <Xml Include="..\..\conf\telescopSetup.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

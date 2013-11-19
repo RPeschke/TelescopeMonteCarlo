@@ -9,7 +9,7 @@
         <z pos="0"/>
       </position>
       <position nr="2">
-        <x pos="20"/>
+        <x pos="0.020"/>
         <y pos="0"/>
         <z pos="0"/>
       </position>
@@ -21,24 +21,24 @@
         <z pos="0"/>
       </position>
       <position nr="2">
-        <x pos="20"/>
+        <x pos="0.020"/>
         <y pos="0"/>
         <z pos="0"/>
       </position>
       <position nr="3">
-        <x pos="20"/>
-        <y pos="20"/>
+        <x pos="0.020"/>
+        <y pos="0.020"/>
         <z pos="0"/>
       </position>
       <position nr="4">
         <x pos="0"/>
-        <y pos="20"/>
+        <y pos="0.020"/>
         <z pos="0"/>
       </position>
     </ActiveArea>
-    <Thickness value="0.05"/>
-  <radiationLength value="93.6"/>
-  <PixelSize x="0.045" y="0.045"/>
+    <Thickness value="0.00005"/>
+  <radiationLength value="0.0936"/>
+  <PixelSize x="0.000045" y="0.000045"/>
   </Plane>
   <Plane name="SCT">
     <pixel>
@@ -48,7 +48,7 @@
         <z pos="0"/>
       </position>
       <position nr="2">
-        <x pos="20"/>
+        <x pos="0.020"/>
         <y pos="0"/>
         <z pos="0"/>
       </position>
@@ -60,71 +60,79 @@
         <z pos="0"/>
       </position>
       <position nr="2">
-        <x pos="100"/>
+        <x pos="0.100"/>
         <y pos="0"/>
         <z pos="0"/>
       </position>
       <position nr="3">
-        <x pos="100"/>
-        <y pos="100"/>
+        <x pos="0.100"/>
+        <y pos="0.100"/>
         <z pos="0"/>
       </position>
       <position nr="4">
         <x pos="0"/>
-        <y pos="100"/>
+        <y pos="0.100"/>
         <z pos="0"/>
       </position>
     </ActiveArea>
-    <Thickness value="0.05"/>
-  <radiationLength value="93.6"/>
-  <PixelSize x="0.078" y="25"/>
+    <Thickness value="0.00005"/>
+  <radiationLength value="0.0936"/>
+  <PixelSize x="0.000078" y="0.025"/>
   </Plane>   
 
 </PredefinedPlanes>
 <Planes>
   <plane nr="1" Type="TelescopePlane">
     <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
-
+    <modifyPlane>
+         <move x="-0.010" y="-0.010" z="0"/>
+   </modifyPlane>
   </plane>
   <plane nr="2" Type="TelescopePlane">
     <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
       <rotate axis="z" angle="0.1"/>
-      <move x="0" y="0" z="150"/>
+      <move x="0" y="0" z="0.150"/>
+      <move x="-0.010" y="-0.010" z="0"/>
    </modifyPlane>
   </plane>
   <plane nr="3" Type="TelescopePlane">
     <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
       <rotate axis="z" angle="0.2"/>
-      <move x="0" y="0" z="300"/>
+      <move x="0" y="0" z="0.300"/>
+    <move x="-0.010" y="-0.010" z="0"/>
    </modifyPlane>
   </plane>
   <plane Type="DUT">
     <usePredefinedPlane name="SCT"/>
     <modifyPlane>
-      <move x="0" y="0" z="350"/>
+      <move x="0" y="0" z="0.350"/>
+    <move x="-0.010" y="-0.010" z="0"/>
    </modifyPlane>
   </plane>
   <plane nr="4" Type="TelescopePlane">
     <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
       <rotate axis="z" angle="0.3"/>
-      <move x="0" y="0" z="450"/>
+      <move x="0" y="0" z="0.450"/>
+    <move x="-0.010" y="-0.010" z="0"/>
    </modifyPlane>
   </plane>
   <plane nr="5" Type="TelescopePlane">
     <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
       <rotate axis="z" angle="0.4"/>
-      <move x="0" y="0" z="600"/>
+      <move x="0" y="0" z="0.600"/>
+    <move x="-0.010" y="-0.010" z="0"/>
    </modifyPlane>
   </plane>
   <plane nr="6" Type="TelescopePlane">
     <usePredefinedPlane name="myFancyDefaultTelescopePlane"/>
     <modifyPlane>
       <rotate axis="x" angle="1"/>
-      <move x="0" y="0" z="750"/>
+      <move x="0" y="0" z="0.750"/>
+    <move x="-0.010" y="-0.010" z="0"/>
    </modifyPlane>
   </plane>
 </Planes>
@@ -133,11 +141,11 @@
     <mass>0.000511</mass> <!-- Particle mass in GeV -->
     <charge>-1</charge>
     <energy>5</energy><!-- Particle energy in GeV -->
-    <beamEnergySpread>0.5</beamEnergySpread><!-- Gaussian shape Energy spread in GeV -->
-    <beamCenterX>10</beamCenterX>  <!-- Distance from (0,0) in mm -->
-    <beamCenterY>5</beamCenterY>  <!-- Distance from (0,0) in mm -->
-    <beamSize>10</beamSize> <!-- Gaussian shape Beam size in mm -->
+    <beamEnergySpread>0.05</beamEnergySpread><!-- Gaussian shape Energy spread in GeV -->
+    <beamCenterX>0</beamCenterX>  <!-- Distance from (0,0) in m -->
+    <beamCenterY>0</beamCenterY>  <!-- Distance from (0,0) in m -->
+    <beamSize>0</beamSize> <!-- Gaussian shape Beam size in m -->
   </Beam>
-  <BField x="0" y="0" z="0"/>
+  <BField x="0" y="1" z="0"/>
 </ConfigurationFile>
 
