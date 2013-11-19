@@ -59,14 +59,9 @@ public:
 
 
 };
-int intersectionPlanePlane(const hyperPlane& plane1, const hyperPlane& plane2, line& intersectionLine);
 
-int intersectionPlanePlaneSphere(const hyperPlane& particlePlane, const hyperPlane& TelescopePlane, const Sphere& sphere, Particle& p);
-
-int intersectionLineSphere(const line& l,const Sphere& sphere,mcEUTEL::vector3& p);
 
 int intersectionHelixPlaneApproxNumeric(const helix& h,const hyperPlane& plane,mcEUTEL::vector3& p);
-//int intersectionHelixPlaneApprox(const helix& h,const hyperPlane& plane,mcEUTEL::vector3& p);
 double intersectionHelixPlaneApprox( const helix& h,const hyperPlane& plane);
 int intersectionHelixPlaneApproxNowton(const helix& h,const hyperPlane& plane,double& lambda);
 
