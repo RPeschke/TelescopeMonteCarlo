@@ -14,7 +14,9 @@ Particle::Particle()
   BeamSpread_(0.0),
   BeamCentreX_(0.0),
   BeamCentreY_(0.0),
-  particleEnergy_(0.0)
+  particleEnergy_(0.0),
+  InitialBeamDirectionY(0.0),
+  InitialBeamDirectionX(0.0)
 {}
 
 void Particle::init(string name, double mass, double charge, double energy, double beamsize, double beamspread, double beamcentrex, double beamcentrey){
@@ -35,9 +37,12 @@ void Particle::newParticle()
 	position_.x=BeamCentreX_+BeamSize_*getNormRandom();
 	particleEnergy_=BeamEnergy_+BeamSpread_*getNormRandom();
 	position_.z=0;
-	directions_.x=0;
-	directions_.y=0;
+	directions_.x=InitialBeamDirectionX*getNormRandom();
+	directions_.y=InitialBeamDirectionY*getNormRandom();
 	directions_.z=1;
+
+	// Sigma phi= 0.0007
+	// Sigma Theta= 0.0006
 	
 }
 
@@ -57,4 +62,7 @@ int Particle::ProcessXMLNode( rapidxml::xml_node<> *node )
 	BeamSpread_ =std::atof(node->first_node("beamEnergySpread")->first_node()->value());
 	BeamCentreX_ = std::atof(node->first_node("beamCenterX")->first_node()->value());
 	BeamCentreY_ = std::atof(node->first_node("beamCenterY")->first_node()->value());
+	InitialBeamDirectionX=tan(std::atof(node->first_node("InitialBeamAngle")->first_attribute("phi")->value()));
+	InitialBeamDirectionY=tan(std::atof(node->first_node("InitialBeamAngle")->first_attribute("theta")->value()));
+
 }

@@ -141,10 +141,11 @@
     <mass>0.000511</mass> <!-- Particle mass in GeV -->
     <charge>-1</charge>
     <energy>5</energy><!-- Particle energy in GeV -->
-    <beamEnergySpread>0.05</beamEnergySpread><!-- Gaussian shape Energy spread in GeV -->
+    <beamEnergySpread>0.5</beamEnergySpread><!-- Gaussian shape Energy spread in GeV -->
     <beamCenterX>0</beamCenterX>  <!-- Distance from (0,0) in m -->
     <beamCenterY>0</beamCenterY>  <!-- Distance from (0,0) in m -->
     <beamSize>0</beamSize> <!-- Gaussian shape Beam size in m -->
+    <InitialBeamAngle phi ="0.0007" theta="0.0006"/>
   </Beam>
   <BField x="0" y="1" z="0"/>
 </ConfigurationFile>

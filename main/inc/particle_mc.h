@@ -16,8 +16,10 @@ class Particle{
     double BeamSpread_;  //Error on the energy, measured as one sigma of a guassianly distributed energy
     double BeamCentreX_;
     double BeamCentreY_;
+	
   public:
 	  double Charge_;
+	  double InitialBeamDirectionX,InitialBeamDirectionY;
 	  //double x,y,z;
 	  mcEUTEL::vector3 position_,directions_;
 
